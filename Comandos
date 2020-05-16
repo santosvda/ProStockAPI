@@ -1,0 +1,14 @@
+dotnet --list-sdks
+dotnet new webapi -n ProStock.API //cria com a versão corrente por isso o global.json
+dotnet new classlib -n ProStock.Domain
+dotnet new classlib -n ProStock.Repository
+dotnet new sln -n ProStock
+dotnet add ProStock.Repository/ProStock.Repository.csproj reference ProStock.Domain/ProStock.Domain.csproj
+dotnet sln ProStock.sln add ProStock.API/ProStock.API.csproj ProStock.Domain/ProStock.Domain.csproj ProStock.Repository/ProStock.Repository.csproj
+
+nuget Microsoft.EntityFrameworkCore 2.2.0 no repository
+nuget Microsoft.EntityFrameworkCore.SqlServer 2.2.6 na API e repository
+
+dotnet ef --startup-project ../ProStock.API migrations add init
+dotnet ef --startup-project ../ProStock.API database update --msbuildprojectextentionspath obj/local.
+
