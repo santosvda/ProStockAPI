@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProStock.Repository.Migrations
 {
-    public partial class init1 : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,8 +76,8 @@ namespace ProStock.Repository.Migrations
                     Pais = table.Column<string>(nullable: true),
                     Ativo = table.Column<bool>(nullable: false),
                     DataInclusao = table.Column<DateTime>(nullable: false),
-                    DataExclusao = table.Column<DateTime>(nullable: false),
-                    PessoaId = table.Column<int>(nullable: false)
+                    DataExclusao = table.Column<DateTime>(nullable: true),
+                    PessoaId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -87,7 +87,7 @@ namespace ProStock.Repository.Migrations
                         column: x => x.PessoaId,
                         principalTable: "Pessoas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,8 +101,8 @@ namespace ProStock.Repository.Migrations
                     Email = table.Column<string>(nullable: true),
                     Ativo = table.Column<bool>(nullable: false),
                     DataInclusao = table.Column<DateTime>(nullable: false),
-                    DataExclusao = table.Column<DateTime>(nullable: false),
-                    EnderecoId = table.Column<int>(nullable: false)
+                    DataExclusao = table.Column<DateTime>(nullable: true),
+                    EnderecoId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -112,7 +112,7 @@ namespace ProStock.Repository.Migrations
                         column: x => x.EnderecoId,
                         principalTable: "Enderecos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -125,10 +125,10 @@ namespace ProStock.Repository.Migrations
                     Senha = table.Column<string>(nullable: true),
                     Ativo = table.Column<bool>(nullable: false),
                     DataInclusao = table.Column<DateTime>(nullable: false),
-                    DataExclusao = table.Column<DateTime>(nullable: false),
-                    PessoaId = table.Column<int>(nullable: false),
-                    TipoUsuarioId = table.Column<int>(nullable: false),
-                    LojaId = table.Column<int>(nullable: false)
+                    DataExclusao = table.Column<DateTime>(nullable: true),
+                    PessoaId = table.Column<int>(nullable: true),
+                    TipoUsuarioId = table.Column<int>(nullable: true),
+                    LojaId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -138,7 +138,7 @@ namespace ProStock.Repository.Migrations
                         column: x => x.LojaId,
                         principalTable: "Lojas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Usuarios_Pessoas_PessoaId",
                         column: x => x.PessoaId,
@@ -162,11 +162,11 @@ namespace ProStock.Repository.Migrations
                     Nome = table.Column<string>(nullable: true),
                     Descricao = table.Column<string>(nullable: true),
                     Marca = table.Column<string>(nullable: true),
-                    ValorUnit = table.Column<decimal>(nullable: false),
+                    ValorUnit = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Ativo = table.Column<bool>(nullable: false),
                     DataInclusao = table.Column<DateTime>(nullable: false),
-                    DataExclusao = table.Column<DateTime>(nullable: false),
-                    UsuarioId = table.Column<int>(nullable: false)
+                    DataExclusao = table.Column<DateTime>(nullable: true),
+                    UsuarioId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -176,7 +176,7 @@ namespace ProStock.Repository.Migrations
                         column: x => x.UsuarioId,
                         principalTable: "Usuarios",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -188,7 +188,8 @@ namespace ProStock.Repository.Migrations
                     ValorTotal = table.Column<decimal>(nullable: false),
                     Data = table.Column<DateTime>(nullable: false),
                     Ativo = table.Column<bool>(nullable: false),
-                    DataExclusao = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<string>(nullable: true),
+                    DataExclusao = table.Column<DateTime>(nullable: true),
                     ClienteId = table.Column<int>(nullable: false),
                     UsuarioId = table.Column<int>(nullable: false)
                 },
@@ -206,7 +207,7 @@ namespace ProStock.Repository.Migrations
                         column: x => x.UsuarioId,
                         principalTable: "Usuarios",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -254,7 +255,7 @@ namespace ProStock.Repository.Migrations
                         column: x => x.VendaId,
                         principalTable: "Vendas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

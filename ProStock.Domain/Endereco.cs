@@ -14,8 +14,8 @@ namespace ProStock.Domain
         public string Pais { get; set; }
         public bool Ativo { get; set; }
         public DateTime DataInclusao { get; set; }
-        public DateTime DataExclusao { get; set; }
-        public int PessoaId { get; set; }
+        public DateTime? DataExclusao { get; set; }
+        public int? PessoaId { get; set; }
         public Pessoa Pessoa { get; set; }
 
     }

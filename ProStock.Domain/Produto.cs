@@ -12,8 +12,8 @@ namespace ProStock.Domain
         public decimal ValorUnit { get; set; }
         public bool Ativo { get; set; }
         public DateTime DataInclusao { get; set; }
-        public DateTime DataExclusao { get; set; }
-        public int UsuarioId { get; set; }
+        public DateTime? DataExclusao { get; set; }
+        public int? UsuarioId { get; set; }
         public Usuario Usuario { get; set; }
         public List<ProdutoVenda> ProdutosVendas { get; set; }
 

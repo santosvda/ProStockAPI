@@ -1,9 +1,9 @@
 E:\Estudo\TCC\Projeto\ProStock.Domain\bin\Debug\netstandard2.0\ProStock.Domain.deps.json
 E:\Estudo\TCC\Projeto\ProStock.Domain\bin\Debug\netstandard2.0\ProStock.Domain.dll
 E:\Estudo\TCC\Projeto\ProStock.Domain\bin\Debug\netstandard2.0\ProStock.Domain.pdb
-E:\Estudo\TCC\Projeto\ProStock.Domain\obj\Debug\netstandard2.0\ProStock.Domain.csprojAssemblyReference.cache
 E:\Estudo\TCC\Projeto\ProStock.Domain\obj\Debug\netstandard2.0\ProStock.Domain.AssemblyInfoInputs.cache
 E:\Estudo\TCC\Projeto\ProStock.Domain\obj\Debug\netstandard2.0\ProStock.Domain.AssemblyInfo.cs
 E:\Estudo\TCC\Projeto\ProStock.Domain\obj\Debug\netstandard2.0\ProStock.Domain.dll
 E:\Estudo\TCC\Projeto\ProStock.Domain\obj\Debug\netstandard2.0\ProStock.Domain.pdb
+E:\Estudo\TCC\Projeto\ProStock.Domain\obj\Debug\netstandard2.0\ProStock.Domain.csprojAssemblyReference.cache
 E:\Estudo\TCC\Projeto\ProStock.Domain\obj\Debug\netstandard2.0\ProStock.Domain.csproj.CoreCompileInputs.cache

@@ -27,9 +27,15 @@ namespace ProStock.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //configuração de conexão com o banco
             services.AddDbContext<ProStockContext>(
                 x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //sempre que precisar do IProAgilRepository, impletamenta o ProAgilRepository
+            services.AddScoped<IProStockRepository, ProStockRepository>();
+            //Configuração de permisão - CORS
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +52,7 @@ namespace ProStock.API
             }
 
             //app.UseHttpsRedirection();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
         }
     }

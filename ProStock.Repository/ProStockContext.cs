@@ -19,6 +19,9 @@ namespace ProStock.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Produto>()
+            .Property(p => p.ValorUnit)
+            .HasColumnType("decimal(10,2)");
             /*
                 sobrescrevendo o metodo
                 especificando a relação (n,n) Evento - Palestrante 

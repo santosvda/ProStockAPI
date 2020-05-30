@@ -52,13 +52,13 @@ namespace ProStock.Repository.Migrations
 
                     b.Property<string>("Complemento");
 
-                    b.Property<DateTime>("DataExclusao");
+                    b.Property<DateTime?>("DataExclusao");
 
                     b.Property<DateTime>("DataInclusao");
 
                     b.Property<string>("Pais");
 
-                    b.Property<int>("PessoaId");
+                    b.Property<int?>("PessoaId");
 
                     b.Property<string>("Rua");
 
@@ -104,7 +104,7 @@ namespace ProStock.Repository.Migrations
 
                     b.Property<bool>("Ativo");
 
-                    b.Property<DateTime>("DataExclusao");
+                    b.Property<DateTime?>("DataExclusao");
 
                     b.Property<DateTime>("DataInclusao");
 
@@ -112,7 +112,7 @@ namespace ProStock.Repository.Migrations
 
                     b.Property<string>("Email");
 
-                    b.Property<int>("EnderecoId");
+                    b.Property<int?>("EnderecoId");
 
                     b.Property<string>("Telefone");
 
@@ -156,7 +156,7 @@ namespace ProStock.Repository.Migrations
 
                     b.Property<bool>("Ativo");
 
-                    b.Property<DateTime>("DataExclusao");
+                    b.Property<DateTime?>("DataExclusao");
 
                     b.Property<DateTime>("DataInclusao");
 
@@ -166,9 +166,10 @@ namespace ProStock.Repository.Migrations
 
                     b.Property<string>("Nome");
 
-                    b.Property<int>("UsuarioId");
+                    b.Property<int?>("UsuarioId");
 
-                    b.Property<decimal>("ValorUnit");
+                    b.Property<decimal>("ValorUnit")
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 
@@ -213,19 +214,19 @@ namespace ProStock.Repository.Migrations
 
                     b.Property<bool>("Ativo");
 
-                    b.Property<DateTime>("DataExclusao");
+                    b.Property<DateTime?>("DataExclusao");
 
                     b.Property<DateTime>("DataInclusao");
 
                     b.Property<string>("Login");
 
-                    b.Property<int>("LojaId");
+                    b.Property<int?>("LojaId");
 
-                    b.Property<int>("PessoaId");
+                    b.Property<int?>("PessoaId");
 
                     b.Property<string>("Senha");
 
-                    b.Property<int>("TipoUsuarioId");
+                    b.Property<int?>("TipoUsuarioId");
 
                     b.HasKey("Id");
 
@@ -250,7 +251,9 @@ namespace ProStock.Repository.Migrations
 
                     b.Property<DateTime>("Data");
 
-                    b.Property<DateTime>("DataExclusao");
+                    b.Property<DateTime?>("DataExclusao");
+
+                    b.Property<string>("Status");
 
                     b.Property<int>("UsuarioId");
 
@@ -277,8 +280,7 @@ namespace ProStock.Repository.Migrations
                 {
                     b.HasOne("ProStock.Domain.Pessoa", "Pessoa")
                         .WithMany("Enderecos")
-                        .HasForeignKey("PessoaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PessoaId");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Estoque", b =>
@@ -293,16 +295,14 @@ namespace ProStock.Repository.Migrations
                 {
                     b.HasOne("ProStock.Domain.Endereco", "Endereco")
                         .WithMany()
-                        .HasForeignKey("EnderecoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EnderecoId");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Produto", b =>
                 {
                     b.HasOne("ProStock.Domain.Usuario", "Usuario")
                         .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UsuarioId");
                 });
 
             modelBuilder.Entity("ProStock.Domain.ProdutoVenda", b =>
@@ -322,18 +322,15 @@ namespace ProStock.Repository.Migrations
                 {
                     b.HasOne("ProStock.Domain.Loja", "Loja")
                         .WithMany("Usuarios")
-                        .HasForeignKey("LojaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("LojaId");
 
                     b.HasOne("ProStock.Domain.Pessoa", "Pessoa")
                         .WithMany()
-                        .HasForeignKey("PessoaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PessoaId");
 
                     b.HasOne("ProStock.Domain.TipoUsuario", "TipoUsuario")
-                        .WithMany()
-                        .HasForeignKey("TipoUsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("Usuarios")
+                        .HasForeignKey("TipoUsuarioId");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Venda", b =>
