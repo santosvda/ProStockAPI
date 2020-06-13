@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var produtos = await _repository.GetAllProdutosAsyncById(produtoId, includeVendas);              
+                var produtos = await _repository.GetProdutosAsyncById(produtoId, includeVendas);              
                 return Ok(produtos); 
             }
             catch (System.Exception)
@@ -63,6 +64,8 @@ namespace ProStock.API.Controllers
         {
             try
             {
+                model.DataInclusao = DateTime.Now;
+                
                 _repository.Add(model);
                 
                 if(await _repository.SaveChangesAsync())

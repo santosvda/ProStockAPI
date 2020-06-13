@@ -16,7 +16,7 @@ namespace ProStock.Domain
         public DateTime DataInclusao { get; set; }
         public DateTime? DataExclusao { get; set; }
         public int? PessoaId { get; set; }
-        public Pessoa Pessoa { get; set; }
+        //public Pessoa Pessoa { get; set; }
 
     }
 }

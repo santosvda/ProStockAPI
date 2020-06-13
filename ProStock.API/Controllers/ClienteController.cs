@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,22 +9,35 @@ namespace ProStock.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TipoUsuarioController : ControllerBase //herda para trabalhar com http e etc
+    public class ClienteController : ControllerBase //herda para trabalhar com http e etc
     {
         private readonly IProStockRepository _repository;
-        public TipoUsuarioController(IProStockRepository repository)
+        public ClienteController(IProStockRepository repository)
         {
             _repository = repository;
         }
 
-        [HttpGet]// api/tipousuario
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
             {
-                var tipoUsuarios = await _repository.GetAllTipoUsuarioAsync();
+                var cliente = await _repository.GetAllClienteAsync();
                 
-                return Ok(tipoUsuarios); 
+                return Ok(cliente); 
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+            }
+        }
+        [HttpGet("{ClienteId}")]// api/cliente/{ClienteId}
+        public async Task<IActionResult> Get(int ClienteId)
+        {
+            try
+            {
+                var cliente = await _repository.GetClienteAsyncById(ClienteId);              
+                return Ok(cliente); 
             }
             catch (System.Exception)
             {
@@ -31,44 +45,31 @@ namespace ProStock.API.Controllers
             }
         }
 
-        [HttpGet("{TipoId}")]// api/tipousuario/{id}
-        public async Task<IActionResult> Get(int tipoId)
+        [HttpGet("getByCpf/{cpf}")]// api/cliente/{cpf}
+        public async Task<IActionResult> Get(string cpf)
         {
             try
             {
-                var tipoUsuarios = await _repository.GetTipoUsuarioAsyncById(tipoId);              
-                return Ok(tipoUsuarios); 
+                var cliente = await _repository.GetClienteAsyncByCpf(cpf);              
+                return Ok(cliente); 
             }
             catch (System.Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
             }
-        }
-        [HttpGet("getByDescricao/{descricao}")]// api/tipousuario/getByDescricao/{descricao}
-        public async Task<IActionResult> Get(string descricao)
-        {
-            try
-            {
-                var tipoUsuarios = await _repository.GetAllTipoUsuarioAsyncByDescricao(descricao);
-
-                return Ok(tipoUsuarios); 
-            }
-            catch (System.Exception)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
-            }   
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(TipoUsuario model)
+        public async Task<IActionResult> Post(Cliente model)
         {
             try
-            {
+            {   
+                model.Pessoa.DataInclusao = DateTime.Now;
                 _repository.Add(model);
                 
                 if(await _repository.SaveChangesAsync())
                 {
-                    return Created($"/api/tipousuario/{model.Id}", model);
+                    return Created($"/api/cliente/{model.Id}", model);
                 }
             }
             catch (System.Exception ex)
@@ -78,19 +79,24 @@ namespace ProStock.API.Controllers
             return BadRequest();
         }
 
-        [HttpPut("{TipoId}")]
-        public async Task<IActionResult> Put(int TipoId, TipoUsuario model)
+        [HttpPut("{ClienteId}")]
+        public async Task<IActionResult> Put(int ClienteId, Cliente model)
         {
             try
             {
-                var tipo = await _repository.GetTipoUsuarioAsyncById(TipoId);
-                if(tipo == null) return NotFound();
+                var cliente = await _repository.GetClienteAsyncById(ClienteId);
+                if(cliente == null) return NotFound();
+
+                //model.Pessoa.DataInclusao = cliente.Pessoa.DataInclusao;
+
+                if(model.Ativo == false)
+                    model.Pessoa.DataExclusao = DateTime.Now;
 
                 _repository.Update(model);
                 
                 if(await _repository.SaveChangesAsync())
                 {
-                    return Created($"/api/tipousuario/{model.Id}", model);
+                    return Created($"/api/cliente/{model.Id}", model);
                 }                
             }
             catch (System.Exception ex)
@@ -101,15 +107,15 @@ namespace ProStock.API.Controllers
             return BadRequest();         
         }
 
-        [HttpDelete("{TipoId}")]
-        public async Task<IActionResult> Delete(int TipoId)
+        [HttpDelete("{ClienteId}")]
+        public async Task<IActionResult> Delete(int ClienteId)
         {
             try
             {
-                var pessoa = await _repository.GetTipoUsuarioAsyncById(TipoId);
-                if(pessoa == null) return NotFound();
+                var cliente = await _repository.GetClienteAsyncById(ClienteId);
+                if(cliente == null) return NotFound();
 
-                _repository.Delete(pessoa);
+                _repository.Delete(cliente);
                 
                 if(await _repository.SaveChangesAsync())
                 {

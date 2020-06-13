@@ -66,7 +66,7 @@ namespace ProStock.Repository
             return await query.ToArrayAsync();
         }
 
-        public async Task<Produto> GetAllProdutosAsyncById (int produtoId, bool includeVendas = false){
+        public async Task<Produto> GetProdutosAsyncById (int produtoId, bool includeVendas = false){
             IQueryable<Produto> query = _context.Produtos
             .Include(p => p.Usuario);
 
@@ -99,7 +99,7 @@ namespace ProStock.Repository
             return await query.ToArrayAsync();
         }
 
-        public async Task<TipoUsuario> GetAllTipoUsuarioAsyncById (int tipoId){
+        public async Task<TipoUsuario> GetTipoUsuarioAsyncById (int tipoId){
             IQueryable<TipoUsuario> query = _context.TiposUsuarios;
 
             query = query.AsNoTracking().OrderByDescending(tp => tp.Descricao)
@@ -110,7 +110,8 @@ namespace ProStock.Repository
 
         //Pessoa ----------------------
         public async Task<Pessoa[]> GetAllPessoaAsync(){
-            IQueryable<Pessoa> query = _context.Pessoas;
+            IQueryable<Pessoa> query = _context.Pessoas
+            .Include(p => p.Enderecos);
 
             query = query.AsNoTracking().OrderBy(p => p.Nome);
 
@@ -118,7 +119,8 @@ namespace ProStock.Repository
         }
 
         public async Task<Pessoa[]> GetAllPessoaAsyncByName(string nome){
-            IQueryable<Pessoa> query = _context.Pessoas;
+            IQueryable<Pessoa> query = _context.Pessoas
+            .Include(p => p.Enderecos);
 
             query = query.AsNoTracking().OrderByDescending(p => p.Nome)
             .Where(p => p.Nome.ToLower().Contains(nome.ToLower()));
@@ -126,8 +128,9 @@ namespace ProStock.Repository
             return await query.ToArrayAsync();
         }
 
-        public async Task<Pessoa> GetAllPessoaAsyncById (int pessoaId){
-            IQueryable<Pessoa> query = _context.Pessoas;
+        public async Task<Pessoa> GetPessoaAsyncById (int pessoaId){
+            IQueryable<Pessoa> query = _context.Pessoas
+            .Include(p => p.Enderecos);
 
             query = query.AsNoTracking().OrderByDescending(p => p.Nome)
             .Where(p => p.Id == pessoaId);
@@ -135,18 +138,19 @@ namespace ProStock.Repository
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<Pessoa> GetAllPessoaAsyncByCpf (string cpf){
-            IQueryable<Pessoa> query = _context.Pessoas;
+        public async Task<Pessoa> GetPessoaAsyncByCpf (string cpf){
+            IQueryable<Pessoa> query = _context.Pessoas
+            .Include(p => p.Enderecos);
 
             query = query.AsNoTracking().OrderByDescending(p => p.Nome)
             .Where(p => p.Cpf == cpf);
 
             return await query.FirstOrDefaultAsync();
         }
+
         //Endereco ----------------------
         public async Task<Endereco[]> GetAllEnderecoAsync(){
-            IQueryable<Endereco> query = _context.Enderecos
-            .Include(e => e.Pessoa);
+            IQueryable<Endereco> query = _context.Enderecos;
 
             query = query.AsNoTracking().OrderBy(e => e.Id);
 
@@ -154,8 +158,7 @@ namespace ProStock.Repository
         }
 
         public async Task<Endereco[]> GetAllEnderecoAsyncByCep(string cep){
-            IQueryable<Endereco> query = _context.Enderecos
-            .Include(e => e.Pessoa);
+            IQueryable<Endereco> query = _context.Enderecos;
 
             query = query.AsNoTracking().OrderByDescending(e => e.Id)
             .Where(e => e.Cep.ToLower().Contains(cep.ToLower()));
@@ -164,8 +167,7 @@ namespace ProStock.Repository
         }
 
         public async Task<Endereco[]> GetAllEnderecoAsyncByCidade (string cidade){
-            IQueryable<Endereco> query = _context.Enderecos
-            .Include(e => e.Pessoa);
+            IQueryable<Endereco> query = _context.Enderecos;
 
             query = query.AsNoTracking().OrderByDescending(e => e.Cidade)
             .Where(e => e.Cidade.ToLower().Contains(cidade.ToLower()));
@@ -174,13 +176,92 @@ namespace ProStock.Repository
         }
 
         public async Task<Endereco[]> GetAllEnderecoAsyncByRua (string rua){
-            IQueryable<Endereco> query = _context.Enderecos
-            .Include(e => e.Pessoa);
+            IQueryable<Endereco> query = _context.Enderecos;
 
             query = query.AsNoTracking().OrderByDescending(e => e.Rua)
             .Where(e => e.Rua.ToLower().Contains(rua.ToLower()));
 
             return await query.ToArrayAsync();
         }
+
+        public async Task<Endereco> GetEnderecoAsyncById (int enderecoId){
+            IQueryable<Endereco> query = _context.Enderecos;
+
+            query = query.AsNoTracking().OrderByDescending(e => e.DataInclusao)
+            .Where(e => e.Id == enderecoId);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        //Cliente-------------------
+        public async Task<Cliente[]> GetAllClienteAsync(){
+            IQueryable<Cliente> query = _context.Clientes
+            .Include(c => c.Pessoa).ThenInclude(ce => ce.Enderecos);
+
+            query = query.AsNoTracking().OrderBy(e => e.Id);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Cliente> GetClienteAsyncById (int clienteId){
+            IQueryable<Cliente> query = _context.Clientes
+            .Include(c => c.Pessoa).ThenInclude(ce => ce.Enderecos);
+
+            query = query.AsNoTracking().OrderByDescending(c => c.Id)
+            .Where(c => c.Id == clienteId);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Cliente> GetClienteAsyncByCpf (string cpf){
+            IQueryable<Cliente> query = _context.Clientes
+            .Include(c => c.Pessoa).ThenInclude(ce => ce.Enderecos);
+
+            query = query.AsNoTracking().OrderByDescending(c => c.Id)
+            .Where(c => c.Pessoa.Cpf.ToLower().Contains(cpf.ToLower()));
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Cliente[]> GetAllClienteAsyncByName (string nome){
+            IQueryable<Cliente> query = _context.Clientes
+            .Include(c => c.Pessoa).ThenInclude(ce => ce.Enderecos);
+
+            query = query.AsNoTracking().OrderByDescending(c => c.Id)
+            .Where(c => c.Pessoa.Nome.ToLower().Contains(nome.ToLower()));
+
+            return await query.ToArrayAsync();
+        }
+
+        //Loja------------------------
+        public async Task<Loja[]> GetAllLojaAsync(){
+            IQueryable<Loja> query = _context.Lojas
+            .Include(l => l.Endereco);
+
+            query = query.AsNoTracking().OrderBy(e => e.Id);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Loja> GetLojaAsyncById (int lojaId){
+            IQueryable<Loja> query = _context.Lojas
+            .Include(l => l.Endereco);
+
+            query = query.AsNoTracking().OrderByDescending(l => l.Descricao)
+            .Where(l => l.Id == lojaId);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Loja[]> GetAllLojaAsyncByDescricao (string descricao){
+            IQueryable<Loja> query = _context.Lojas
+            .Include(l => l.Endereco);
+
+            query = query.AsNoTracking().OrderByDescending(c => c.Id)
+            .Where(l => l.Descricao.ToLower().Contains(descricao.ToLower()));
+
+            return await query.ToArrayAsync();
+        }
+
     }
 }
