@@ -32,11 +32,11 @@ namespace ProStock.API.Controllers
         }
 
         [HttpGet("{TipoId}")]// api/tipousuario/{id}
-        public async Task<IActionResult> Get(int tipoId)
+        public async Task<IActionResult> Get(int TipoId)
         {
             try
             {
-                var tipoUsuarios = await _repository.GetTipoUsuarioAsyncById(tipoId);              
+                var tipoUsuarios = await _repository.GetTipoUsuarioAsyncById(TipoId);              
                 return Ok(tipoUsuarios); 
             }
             catch (System.Exception)
@@ -106,10 +106,10 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var pessoa = await _repository.GetTipoUsuarioAsyncById(TipoId);
-                if(pessoa == null) return NotFound();
+                var tipo = await _repository.GetTipoUsuarioAsyncById(TipoId);
+                if(tipo == null) return NotFound();
 
-                _repository.Delete(pessoa);
+                _repository.Delete(tipo);
                 
                 if(await _repository.SaveChangesAsync())
                 {

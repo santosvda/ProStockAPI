@@ -14,9 +14,9 @@ namespace ProStock.Domain
         public int? PessoaId { get; set; }
         public Pessoa Pessoa { get; set; }
         public int? TipoUsuarioId { get; set; }
-        public TipoUsuario TipoUsuario { get; set; }
+        //public TipoUsuario TipoUsuario { get; set; }
         public int? LojaId { get; set; }
-        public Loja Loja { get; set; }
+        //public Loja Loja { get; set; }
         public List<Venda> Vendas { get; set; }
     }
 }

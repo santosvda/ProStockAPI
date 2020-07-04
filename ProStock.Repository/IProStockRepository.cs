@@ -45,5 +45,13 @@ namespace ProStock.Repository
          Task<Loja[]> GetAllLojaAsync();
          Task<Loja> GetLojaAsyncById(int clienteId);
          Task<Loja[]> GetAllLojaAsyncByDescricao(string descricao);
+
+         //Usuário
+         Task<Usuario[]> GetAllUsuarioAsync();
+         Task<Usuario> GetUsuarioAsyncById(int usuarioId);
+         Task<Usuario[]> GetAllUsuarioAsyncByLogin(string login);
+         Task<Usuario> Login(Usuario usuario);
+
+
     }
 }

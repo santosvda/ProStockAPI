@@ -263,5 +263,44 @@ namespace ProStock.Repository
             return await query.ToArrayAsync();
         }
 
+        //Usuario -------------------------
+        public async Task<Usuario[]> GetAllUsuarioAsync(){
+            IQueryable<Usuario> query = _context.Usuarios
+            .Include(p => p.Pessoa);
+
+            query = query.AsNoTracking().OrderBy(u => u.Id);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Usuario> GetUsuarioAsyncById (int usuarioId){
+            IQueryable<Usuario> query = _context.Usuarios
+            .Include(p => p.Pessoa);
+
+            query = query.AsNoTracking().OrderByDescending(u => u.Id)
+            .Where(u => u.Id == usuarioId);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Usuario[]> GetAllUsuarioAsyncByLogin(string usuarioLogin){
+            IQueryable<Usuario> query = _context.Usuarios
+            .Include(p => p.Pessoa);
+            query = query.AsNoTracking().OrderBy(u => u.Id)
+            .Where(u => u.Login == usuarioLogin);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Usuario> Login(Usuario usuario){
+            IQueryable<Usuario> query = _context.Usuarios
+            .Include(p => p.Pessoa);
+
+            query = query.AsNoTracking().OrderBy(u => u.Id)
+            .Where(u => u.Login == usuario.Login && u.Senha == usuario.Senha);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
     }
 }
