@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProStock.Repository;
 
@@ -16,14 +15,12 @@ namespace ProStock.Repository.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("ProStock.Domain.Cliente", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Ativo");
 
@@ -39,8 +36,7 @@ namespace ProStock.Repository.Migrations
             modelBuilder.Entity("ProStock.Domain.Endereco", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Ativo");
 
@@ -74,8 +70,7 @@ namespace ProStock.Repository.Migrations
             modelBuilder.Entity("ProStock.Domain.Estoque", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Ativo");
 
@@ -99,8 +94,7 @@ namespace ProStock.Repository.Migrations
             modelBuilder.Entity("ProStock.Domain.Loja", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Ativo");
 
@@ -126,8 +120,7 @@ namespace ProStock.Repository.Migrations
             modelBuilder.Entity("ProStock.Domain.Pessoa", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Ativo");
 
@@ -151,8 +144,7 @@ namespace ProStock.Repository.Migrations
             modelBuilder.Entity("ProStock.Domain.Produto", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Ativo");
 
@@ -194,8 +186,7 @@ namespace ProStock.Repository.Migrations
             modelBuilder.Entity("ProStock.Domain.TipoUsuario", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Ativo");
 
@@ -209,8 +200,7 @@ namespace ProStock.Repository.Migrations
             modelBuilder.Entity("ProStock.Domain.Usuario", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Ativo");
 
@@ -242,8 +232,7 @@ namespace ProStock.Repository.Migrations
             modelBuilder.Entity("ProStock.Domain.Venda", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Ativo");
 
@@ -278,7 +267,7 @@ namespace ProStock.Repository.Migrations
 
             modelBuilder.Entity("ProStock.Domain.Endereco", b =>
                 {
-                    b.HasOne("ProStock.Domain.Pessoa", "Pessoa")
+                    b.HasOne("ProStock.Domain.Pessoa")
                         .WithMany("Enderecos")
                         .HasForeignKey("PessoaId");
                 });
@@ -320,7 +309,7 @@ namespace ProStock.Repository.Migrations
 
             modelBuilder.Entity("ProStock.Domain.Usuario", b =>
                 {
-                    b.HasOne("ProStock.Domain.Loja", "Loja")
+                    b.HasOne("ProStock.Domain.Loja")
                         .WithMany("Usuarios")
                         .HasForeignKey("LojaId");
 
@@ -328,7 +317,7 @@ namespace ProStock.Repository.Migrations
                         .WithMany()
                         .HasForeignKey("PessoaId");
 
-                    b.HasOne("ProStock.Domain.TipoUsuario", "TipoUsuario")
+                    b.HasOne("ProStock.Domain.TipoUsuario")
                         .WithMany("Usuarios")
                         .HasForeignKey("TipoUsuarioId");
                 });

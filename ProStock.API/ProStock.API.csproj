@@ -3,14 +3,19 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <NoWarn>NU1605</NoWarn>
+    <UserSecretsId>5158b44b-9265-4e3d-b2c9-218302be93f3</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App"/>
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6"/>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.6" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProStock.Domain\ProStock.Domain.csproj"/>
-    <ProjectReference Include="..\ProStock.Repository\ProStock.Repository.csproj"/>
+    <ProjectReference Include="..\ProStock.Domain\ProStock.Domain.csproj" />
+    <ProjectReference Include="..\ProStock.Repository\ProStock.Repository.csproj" />
   </ItemGroup>
 </Project>

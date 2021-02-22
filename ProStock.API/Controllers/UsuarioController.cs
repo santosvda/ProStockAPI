@@ -34,9 +34,9 @@ namespace ProStock.API.Controllers
 
                 return Ok(usuarios);
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou" + ex.Message);
             }
         }
 
@@ -70,10 +70,12 @@ namespace ProStock.API.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Post(Usuario model)
         {
             try
             {
+                model.DataInclusao = DateTime.Now;
                 _repository.Add(model);
 
                 if (await _repository.SaveChangesAsync())
@@ -94,6 +96,11 @@ namespace ProStock.API.Controllers
             {
                 var usuario = await _repository.GetUsuarioAsyncById(UsuarioId);
                 if (usuario == null) return NotFound();
+
+                model.DataInclusao = usuario.DataInclusao;
+
+                if(model.Ativo == false)
+                    model.DataExclusao = DateTime.Now;
 
                 _repository.Update(model);
 
@@ -151,7 +158,7 @@ namespace ProStock.API.Controllers
             catch (System.Exception ex)
             {
 
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"BD falhou{ex.Message}");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"BD falhou {ex.Message}");
 
             }
         }

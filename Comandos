@@ -9,6 +9,14 @@ dotnet sln ProStock.sln add ProStock.API/ProStock.API.csproj ProStock.Domain/Pro
 nuget Microsoft.EntityFrameworkCore 2.2.0 no repository
 nuget Microsoft.EntityFrameworkCore.SqlServer 2.2.6 na API e repository
 
+nuget Pomelo.EntityFrameworkCore.MySql
+
 dotnet ef --startup-project ../ProStock.API migrations add init
 dotnet ef --startup-project ../ProStock.API database update --msbuildprojectextentionspath obj/local.
 
+Strings Teste!
+"Data Source=DESKTOP-OVN4RML\\SQLEXPRESS;Initial Catalog=ProStockDev;Integrated Security=True"
+"Server=localhost;DataBase=prostockdev;Uid=root;Pwd="
+Server=db;Port:3306;DataBase=prostockdev;Uid=root;Pwd=docker;SslMode=none;
+
+docker-compose up -d --build

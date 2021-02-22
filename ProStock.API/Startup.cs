@@ -34,7 +34,7 @@ namespace ProStock.API
         {
             //configuração de conexão com o banco
             services.AddDbContext<ProStockContext>(
-                x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
 
             //Configurando JWT (obs: bearer = portador en-pt)
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
