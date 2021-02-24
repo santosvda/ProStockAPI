@@ -8,14 +8,15 @@
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.6" />
+    <PackageReference Include="Microsoft.AspNetCore.App"/>
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6"/>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10"/>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.6"/>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="4.0.0"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProStock.Domain\ProStock.Domain.csproj" />
-    <ProjectReference Include="..\ProStock.Repository\ProStock.Repository.csproj" />
+    <ProjectReference Include="..\ProStock.Domain\ProStock.Domain.csproj"/>
+    <ProjectReference Include="..\ProStock.Repository\ProStock.Repository.csproj"/>
   </ItemGroup>
 </Project>

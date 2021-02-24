@@ -4,11 +4,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ProStock.API.Dtos;
 using ProStock.Domain;
 using ProStock.Repository;
 
@@ -20,8 +22,10 @@ namespace ProStock.API.Controllers
     {
         private readonly IProStockRepository _repository;
         private readonly IConfiguration _config;
-        public UsuarioController(IProStockRepository repository, IConfiguration config)
+        private readonly IMapper _mapper;
+        public UsuarioController(IProStockRepository repository, IConfiguration config, IMapper mapper)
         {
+            _mapper = mapper;
             _config = config;
             _repository = repository;
         }
@@ -32,7 +36,9 @@ namespace ProStock.API.Controllers
             {
                 var usuarios = await _repository.GetAllUsuarioAsync();
 
-                return Ok(usuarios);
+                var results = _mapper.Map<UsuarioDto[]>(usuarios);//_mapper.Map<EventoDto[]>(eventos); works too!
+
+                return Ok(results);
             }
             catch (System.Exception ex)
             {
@@ -46,7 +52,10 @@ namespace ProStock.API.Controllers
             try
             {
                 var usuario = await _repository.GetUsuarioAsyncById(UsuarioId);
-                return Ok(usuario);
+
+                var results = _mapper.Map<UsuarioDto[]>(usuario);//_mapper.Map<EventoDto[]>(eventos); works too!
+
+                return Ok(results);
             }
             catch (System.Exception)
             {
@@ -61,7 +70,9 @@ namespace ProStock.API.Controllers
             {
                 var usuario = await _repository.GetAllUsuarioAsyncByLogin(Login);
 
-                return Ok(usuario);
+                var results = _mapper.Map<UsuarioDto[]>(usuario);//_mapper.Map<EventoDto[]>(eventos); works too!
+
+                return Ok(results);
             }
             catch (System.Exception)
             {
@@ -71,12 +82,14 @@ namespace ProStock.API.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post(Usuario model)
+        public async Task<IActionResult> Post(UsuarioDto model)
         {
             try
             {
+                var usuario = _mapper.Map<Usuario>(model);
+
                 model.DataInclusao = DateTime.Now;
-                _repository.Add(model);
+                _repository.Add(usuario);
 
                 if (await _repository.SaveChangesAsync())
                 {
@@ -90,7 +103,7 @@ namespace ProStock.API.Controllers
             return BadRequest();
         }
         [HttpPut("{UsuarioId}")]
-        public async Task<IActionResult> Put(int UsuarioId, Usuario model)
+        public async Task<IActionResult> Put(int UsuarioId, UsuarioDto model)
         {
             try
             {
@@ -99,7 +112,7 @@ namespace ProStock.API.Controllers
 
                 model.DataInclusao = usuario.DataInclusao;
 
-                if(model.Ativo == false)
+                if (model.Ativo == false)
                     model.DataExclusao = DateTime.Now;
 
                 _repository.Update(model);

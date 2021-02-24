@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -59,6 +60,14 @@ namespace ProStock.API
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = 
             Newtonsoft.Json.ReferenceLoopHandling.Ignore); //controla redundancia em relação ao retorno da serialização dos itens
+            
+            //Informar a aplicação que a mesma trabalha com AutoMapper
+            /*
+                    *Domain*    *API*  
+                Ex: Evento <--> EventoDto
+                DTO = Data transfer object
+            */
+            services.AddAutoMapper();
 
             //sempre que precisar do IProAgilRepository, impletamenta o ProAgilRepository
             services.AddScoped<IProStockRepository, ProStockRepository>();
