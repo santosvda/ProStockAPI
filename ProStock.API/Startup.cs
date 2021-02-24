@@ -73,6 +73,11 @@ namespace ProStock.API
             services.AddScoped<IProStockRepository, ProStockRepository>();
             //Configuração de permisão - CORS
             services.AddCors();
+
+            //Adicionando swagger
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo {Title = "ProStock", Version = "v1"});
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,6 +98,13 @@ namespace ProStock.API
             //app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c => {
+                c.RoutePrefix = "swagger";
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            });
         }
     }
 }
