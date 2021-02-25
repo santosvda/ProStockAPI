@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProStock.Domain;
 using ProStock.Repository;
+using ProStock.Repository.Interfaces;
 
 namespace ProStock.API.Controllers
 {
@@ -12,17 +13,17 @@ namespace ProStock.API.Controllers
     [ApiController]
     public class EnderecoController : ControllerBase //herda para trabalhar com http e etc
     {
-        private readonly IProStockRepository _repository;
-        public EnderecoController(IProStockRepository repository)
+        private readonly IEnderecoRepository _enderecoRepository;
+        public EnderecoController(IEnderecoRepository enderecoRepository)
         {
-            _repository = repository;
+            _enderecoRepository = enderecoRepository;
         }
         [HttpGet]// api/endereco
         public async Task<IActionResult> Get()
         {
             try
             {
-                var endereco = await _repository.GetAllEnderecoAsync();
+                var endereco = await _enderecoRepository.GetAllEnderecoAsync();
                 
                 return Ok(endereco); 
             }
@@ -36,7 +37,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var endereco = await _repository.GetEnderecoAsyncById(EnderecoId);              
+                var endereco = await _enderecoRepository.GetEnderecoAsyncById(EnderecoId);              
                 return Ok(endereco); 
             }
             catch (System.Exception)
@@ -49,7 +50,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var endereco = await _repository.GetAllEnderecoAsyncByCep(cep);              
+                var endereco = await _enderecoRepository.GetAllEnderecoAsyncByCep(cep);              
                 return Ok(endereco); 
             }
             catch (System.Exception)
@@ -66,9 +67,9 @@ namespace ProStock.API.Controllers
             {
                 model.DataInclusao = DateTime.Now;
                 
-                _repository.Add(model);
+                _enderecoRepository.Add(model);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _enderecoRepository.SaveChangesAsync())
                 {
                     return Created($"/api/endereco/{model.Id}", model);
                 }
@@ -85,7 +86,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var endereco = await _repository.GetEnderecoAsyncById(EnderecoId);
+                var endereco = await _enderecoRepository.GetEnderecoAsyncById(EnderecoId);
                 if(endereco == null) return NotFound();
 
                 model.DataInclusao = endereco.DataInclusao;
@@ -93,9 +94,9 @@ namespace ProStock.API.Controllers
                 if(model.Ativo == false)
                     model.DataExclusao = DateTime.Now;
 
-                _repository.Update(model);
+                _enderecoRepository.Update(model);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _enderecoRepository.SaveChangesAsync())
                 {
                     return Created($"/api/endereco/{model.Id}", model);
                 }                
@@ -113,12 +114,12 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var endereco = await _repository.GetEnderecoAsyncById(EnderecoId);
+                var endereco = await _enderecoRepository.GetEnderecoAsyncById(EnderecoId);
                 if(endereco == null) return NotFound();
 
-                _repository.Delete(endereco);
+                _enderecoRepository.Delete(endereco);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _enderecoRepository.SaveChangesAsync())
                 {
                     return Ok();
                 }                

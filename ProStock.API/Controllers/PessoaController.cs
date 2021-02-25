@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProStock.Domain;
 using ProStock.Repository;
+using ProStock.Repository.Interfaces;
 
 namespace ProStock.API.Controllers
 {
@@ -12,10 +13,10 @@ namespace ProStock.API.Controllers
     [ApiController]
     public class PessoaController : ControllerBase //herda para trabalhar com http e etc
     {
-        private readonly IProStockRepository _repository;
-        public PessoaController(IProStockRepository repository)
+        private readonly IPessoaRepository _pessoaRepository;
+        public PessoaController(IPessoaRepository repository)
         {
-            _repository = repository;
+            _pessoaRepository = repository;
         }
 
         [HttpGet]// api/pessoa
@@ -23,7 +24,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var pessoa = await _repository.GetAllPessoaAsync();
+                var pessoa = await _pessoaRepository.GetAllPessoaAsync();
                 
                 return Ok(pessoa); 
             }
@@ -37,7 +38,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var pessoa = await _repository.GetPessoaAsyncById(pessoaId);              
+                var pessoa = await _pessoaRepository.GetPessoaAsyncById(pessoaId);              
                 return Ok(pessoa); 
             }
             catch (System.Exception)
@@ -50,7 +51,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var pessoa = await _repository.GetAllPessoaAsyncByName(nome);
+                var pessoa = await _pessoaRepository.GetAllPessoaAsyncByName(nome);
 
                 return Ok(pessoa); 
             }
@@ -65,7 +66,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var pessoa = await _repository.GetAllPessoaAsyncByName(cpf);
+                var pessoa = await _pessoaRepository.GetAllPessoaAsyncByName(cpf);
 
                 return Ok(pessoa); 
             }
@@ -81,9 +82,9 @@ namespace ProStock.API.Controllers
             try
             {
                 model.DataInclusao = DateTime.Now;
-                _repository.Add(model);
+                _pessoaRepository.Add(model);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _pessoaRepository.SaveChangesAsync())
                 {
                     return Created($"/api/pessoa/{model.Id}", model);
                 }
@@ -100,7 +101,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var pessoa = await _repository.GetPessoaAsyncById(PessoaId);
+                var pessoa = await _pessoaRepository.GetPessoaAsyncById(PessoaId);
                 if(pessoa == null) return NotFound();
 
                 model.DataInclusao = pessoa.DataInclusao;
@@ -108,9 +109,9 @@ namespace ProStock.API.Controllers
                 if(model.Ativo == false)
                     model.DataExclusao = DateTime.Now;
 
-                _repository.Update(model);
+                _pessoaRepository.Update(model);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _pessoaRepository.SaveChangesAsync())
                 {
                     return Created($"/api/pessoa/{model.Id}", model);
                 }                
@@ -128,12 +129,12 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var pessoa = await _repository.GetPessoaAsyncById(PessoaId);
+                var pessoa = await _pessoaRepository.GetPessoaAsyncById(PessoaId);
                 if(pessoa == null) return NotFound();
 
-                _repository.Delete(pessoa);
+                _pessoaRepository.Delete(pessoa);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _pessoaRepository.SaveChangesAsync())
                 {
                     return Ok();
                 }                

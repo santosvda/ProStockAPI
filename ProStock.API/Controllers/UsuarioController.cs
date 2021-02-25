@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using ProStock.API.Dtos;
 using ProStock.Domain;
 using ProStock.Repository;
+using ProStock.Repository.Interfaces;
 
 namespace ProStock.API.Controllers
 {
@@ -20,21 +21,21 @@ namespace ProStock.API.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase //herda para trabalhar com http e etc
     {
-        private readonly IProStockRepository _repository;
+        private readonly IUsuarioRepository _usuarioRepository;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
-        public UsuarioController(IProStockRepository repository, IConfiguration config, IMapper mapper)
+        public UsuarioController(IUsuarioRepository usuarioRepository, IConfiguration config, IMapper mapper)
         {
             _mapper = mapper;
             _config = config;
-            _repository = repository;
+            _usuarioRepository = usuarioRepository;
         }
         [HttpGet]// api/usuario
         public async Task<IActionResult> Get()
         {
             try
             {
-                var usuarios = await _repository.GetAllUsuarioAsync();
+                var usuarios = await _usuarioRepository.GetAllUsuarioAsync();
 
                 var results = _mapper.Map<UsuarioDto[]>(usuarios);//_mapper.Map<EventoDto[]>(eventos); works too!
 
@@ -51,7 +52,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var usuario = await _repository.GetUsuarioAsyncById(UsuarioId);
+                var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
 
                 var results = _mapper.Map<UsuarioDto[]>(usuario);//_mapper.Map<EventoDto[]>(eventos); works too!
 
@@ -68,7 +69,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var usuario = await _repository.GetAllUsuarioAsyncByLogin(Login);
+                var usuario = await _usuarioRepository.GetAllUsuarioAsyncByLogin(Login);
 
                 var results = _mapper.Map<UsuarioDto[]>(usuario);//_mapper.Map<EventoDto[]>(eventos); works too!
 
@@ -89,9 +90,9 @@ namespace ProStock.API.Controllers
                 var usuario = _mapper.Map<Usuario>(model);
 
                 model.DataInclusao = DateTime.Now;
-                _repository.Add(usuario);
+                _usuarioRepository.Add(usuario);
 
-                if (await _repository.SaveChangesAsync())
+                if (await _usuarioRepository.SaveChangesAsync())
                 {
                     return Created($"/api/usuario/{model.Id}", model);
                 }
@@ -107,7 +108,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var usuario = await _repository.GetUsuarioAsyncById(UsuarioId);
+                var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
                 if (usuario == null) return NotFound();
 
                 model.DataInclusao = usuario.DataInclusao;
@@ -115,9 +116,9 @@ namespace ProStock.API.Controllers
                 if (model.Ativo == false)
                     model.DataExclusao = DateTime.Now;
 
-                _repository.Update(model);
+                _usuarioRepository.Update(model);
 
-                if (await _repository.SaveChangesAsync())
+                if (await _usuarioRepository.SaveChangesAsync())
                 {
                     return Created($"/api/usuario/{model.Id}", model);
                 }
@@ -135,12 +136,12 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var usuario = await _repository.GetUsuarioAsyncById(UsuarioId);
+                var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
                 if (usuario == null) return NotFound();
 
-                _repository.Delete(usuario);
+                _usuarioRepository.Delete(usuario);
 
-                if (await _repository.SaveChangesAsync())
+                if (await _usuarioRepository.SaveChangesAsync())
                 {
                     return Ok();
                 }
@@ -159,7 +160,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var usuarioLogin = await _repository.Login(userLogin);
+                var usuarioLogin = await _usuarioRepository.Login(userLogin);
                 if (usuarioLogin == null) return Unauthorized();
 
                 return Ok(new

@@ -18,6 +18,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ProStock.Repository;
+using ProStock.Repository.Interfaces;
+using ProStock.Repository.Repositorys;
 
 namespace ProStock.API
 {
@@ -71,6 +73,15 @@ namespace ProStock.API
 
             //sempre que precisar do IProAgilRepository, impletamenta o ProAgilRepository
             services.AddScoped<IProStockRepository, ProStockRepository>();
+            services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+            services.AddScoped<IEstoqueRepository, EstoqueRepository>();
+            services.AddScoped<ILojaRepository, LojaRepository>();
+            services.AddScoped<IPessoaRepository, PessoaRepository>();
+            services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            services.AddScoped<ITipoUsuarioRepository, TipoUsuarioRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IVendaRepository, VendaRepository>();
             //Configuração de permisão - CORS
             services.AddCors();
 

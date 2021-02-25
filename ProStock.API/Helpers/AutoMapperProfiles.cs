@@ -24,6 +24,7 @@ namespace ProStock.API.Helpers
             CreateMap<Cliente, ClienteDto>().ReverseMap();
             CreateMap<Endereco, EnderecoDto>().ReverseMap();
             CreateMap<Usuario, UsuarioDto>().ReverseMap();
+            CreateMap<Usuario, UsuarioLoginDto>().ReverseMap();
             CreateMap<Estoque, EstoqueDto>().ReverseMap();
             CreateMap<Loja, LojaDto>().ReverseMap();
             CreateMap<Pessoa, PessoaDto>().ReverseMap();

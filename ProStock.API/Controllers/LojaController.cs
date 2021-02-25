@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProStock.Domain;
 using ProStock.Repository;
+using ProStock.Repository.Interfaces;
 
 namespace ProStock.API.Controllers
 {
@@ -12,17 +13,17 @@ namespace ProStock.API.Controllers
     [ApiController]
     public class LojaController : ControllerBase //herda para trabalhar com http e etc
     {
-        private readonly IProStockRepository _repository;
-        public LojaController(IProStockRepository repository)
+        private readonly ILojaRepository _lojaRepository;
+        public LojaController(ILojaRepository lojaRepository)
         {
-            _repository = repository;
+            _lojaRepository = lojaRepository;
         }
         [HttpGet]// api/Loja
         public async Task<IActionResult> Get()
         {
             try
             {
-                var loja = await _repository.GetAllLojaAsync();
+                var loja = await _lojaRepository.GetAllLojaAsync();
                 
                 return Ok(loja); 
             }
@@ -36,7 +37,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var loja = await _repository.GetLojaAsyncById(LojaId);              
+                var loja = await _lojaRepository.GetLojaAsyncById(LojaId);              
                 return Ok(loja); 
             }
             catch (System.Exception)
@@ -49,7 +50,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var loja = await _repository.GetAllLojaAsyncByDescricao(descricao);              
+                var loja = await _lojaRepository.GetAllLojaAsyncByDescricao(descricao);              
                 return Ok(loja); 
             }
             catch (System.Exception)
@@ -66,9 +67,9 @@ namespace ProStock.API.Controllers
             {
                 model.DataInclusao = DateTime.Now;
                 
-                _repository.Add(model);
+                _lojaRepository.Add(model);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _lojaRepository.SaveChangesAsync())
                 {
                     return Created($"/api/loja/{model.Id}", model);
                 }
@@ -84,7 +85,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var loja = await _repository.GetLojaAsyncById(LojaId);
+                var loja = await _lojaRepository.GetLojaAsyncById(LojaId);
                 if(loja == null) return NotFound();
 
                 model.DataInclusao = loja.DataInclusao;
@@ -92,9 +93,9 @@ namespace ProStock.API.Controllers
                 if(model.Ativo == false)
                     model.DataExclusao = DateTime.Now;
 
-                _repository.Update(model);
+                _lojaRepository.Update(model);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _lojaRepository.SaveChangesAsync())
                 {
                     return Created($"/api/loja/{model.Id}", model);
                 }                
@@ -112,12 +113,12 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var loja = await _repository.GetLojaAsyncById(LojaId);
+                var loja = await _lojaRepository.GetLojaAsyncById(LojaId);
                 if(loja == null) return NotFound();
 
-                _repository.Delete(loja);
+                _lojaRepository.Delete(loja);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _lojaRepository.SaveChangesAsync())
                 {
                     return Ok();
                 }                

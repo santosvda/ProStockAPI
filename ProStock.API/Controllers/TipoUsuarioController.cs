@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProStock.Domain;
 using ProStock.Repository;
+using ProStock.Repository.Interfaces;
 
 namespace ProStock.API.Controllers
 {
@@ -11,10 +12,10 @@ namespace ProStock.API.Controllers
     [ApiController]
     public class TipoUsuarioController : ControllerBase //herda para trabalhar com http e etc
     {
-        private readonly IProStockRepository _repository;
-        public TipoUsuarioController(IProStockRepository repository)
+        private readonly ITipoUsuarioRepository _tipoUsuarioRepository;
+        public TipoUsuarioController(ITipoUsuarioRepository repository)
         {
-            _repository = repository;
+            _tipoUsuarioRepository = repository;
         }
 
         [HttpGet]// api/tipousuario
@@ -22,7 +23,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var tipoUsuarios = await _repository.GetAllTipoUsuarioAsync();
+                var tipoUsuarios = await _tipoUsuarioRepository.GetAllTipoUsuarioAsync();
                 
                 return Ok(tipoUsuarios); 
             }
@@ -37,7 +38,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var tipoUsuarios = await _repository.GetTipoUsuarioAsyncById(TipoId);              
+                var tipoUsuarios = await _tipoUsuarioRepository.GetTipoUsuarioAsyncById(TipoId);              
                 return Ok(tipoUsuarios); 
             }
             catch (System.Exception)
@@ -50,7 +51,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var tipoUsuarios = await _repository.GetAllTipoUsuarioAsyncByDescricao(descricao);
+                var tipoUsuarios = await _tipoUsuarioRepository.GetAllTipoUsuarioAsyncByDescricao(descricao);
 
                 return Ok(tipoUsuarios); 
             }
@@ -65,9 +66,9 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                _repository.Add(model);
+                _tipoUsuarioRepository.Add(model);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _tipoUsuarioRepository.SaveChangesAsync())
                 {
                     return Created($"/api/tipousuario/{model.Id}", model);
                 }
@@ -84,12 +85,12 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var tipo = await _repository.GetTipoUsuarioAsyncById(TipoId);
+                var tipo = await _tipoUsuarioRepository.GetTipoUsuarioAsyncById(TipoId);
                 if(tipo == null) return NotFound();
 
-                _repository.Update(model);
+                _tipoUsuarioRepository.Update(model);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _tipoUsuarioRepository.SaveChangesAsync())
                 {
                     return Created($"/api/tipousuario/{model.Id}", model);
                 }                
@@ -107,12 +108,12 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var tipo = await _repository.GetTipoUsuarioAsyncById(TipoId);
+                var tipo = await _tipoUsuarioRepository.GetTipoUsuarioAsyncById(TipoId);
                 if(tipo == null) return NotFound();
 
-                _repository.Delete(tipo);
+                _tipoUsuarioRepository.Delete(tipo);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _tipoUsuarioRepository.SaveChangesAsync())
                 {
                     return Ok();
                 }                

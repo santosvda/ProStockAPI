@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProStock.Domain;
 using ProStock.Repository;
+using ProStock.Repository.Interfaces;
 
 namespace ProStock.API.Controllers
 {
@@ -11,10 +12,10 @@ namespace ProStock.API.Controllers
     [ApiController]
     public class ProdutoController : ControllerBase //herda para trabalhar com http e etc
     {
-        private readonly IProStockRepository _repository;
-        public ProdutoController(IProStockRepository repository)
+        private readonly IProdutoRepository _produtoRepository;
+        public ProdutoController(IProdutoRepository produtoRepository)
         {
-            _repository = repository;
+            _produtoRepository = produtoRepository;
         }
 
         [HttpGet]// api/produto
@@ -22,7 +23,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var produtos = await _repository.GetAllProdutosAsync(true);
+                var produtos = await _produtoRepository.GetAllProdutosAsync(true);
                 
                 return Ok(produtos); 
             }
@@ -36,7 +37,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var produtos = await _repository.GetProdutosAsyncById(produtoId, includeVendas);              
+                var produtos = await _produtoRepository.GetProdutosAsyncById(produtoId, includeVendas);              
                 return Ok(produtos); 
             }
             catch (System.Exception)
@@ -49,7 +50,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var produtos = await _repository.GetAllProdutosAsyncByName(nome, includeVendas);
+                var produtos = await _produtoRepository.GetAllProdutosAsyncByName(nome, includeVendas);
 
                 return Ok(produtos); 
             }
@@ -66,9 +67,9 @@ namespace ProStock.API.Controllers
             {
                 model.DataInclusao = DateTime.Now;
                 
-                _repository.Add(model);
+                _produtoRepository.Add(model);
                 
-                if(await _repository.SaveChangesAsync())
+                if(await _produtoRepository.SaveChangesAsync())
                 {
                     return Created($"/api/produto/{model.Id}", model);
                 }

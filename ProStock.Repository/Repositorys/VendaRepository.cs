@@ -2,19 +2,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProStock.Domain;
+using ProStock.Repository.Interfaces;
 
-
-namespace ProStock.Repository
+namespace ProStock.Repository.Repositorys
 {
-    public class ProStockRepository : IProStockRepository
+    public class VendaRepository : IVendaRepository
     {
         private readonly ProStockContext _context;
-        public ProStockRepository(ProStockContext context)
+        public VendaRepository(ProStockContext context)
         {
             _context = context;
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
-        //Gerais
+          //Gerais
         public void Add<T>(T entity) where T : class
         {
             _context.Add(entity);
