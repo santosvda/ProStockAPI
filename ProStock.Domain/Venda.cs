@@ -3,14 +3,13 @@ using System.Collections.Generic;
 
 namespace ProStock.Domain
 {
-    public class Venda
+    public class Venda : EntityBase
     {
         public int Id { get; set; }
         public decimal ValorTotal { get; set; }
         public DateTime Data { get; set; }
-        public bool Ativo { get; set; }
         public string Status { get; set; }
-        public DateTime? DataExclusao { get; set; }
+        public string Descricao { get; set; }
         public int ClienteId { get; set; }
         public Cliente Cliente { get; set; }
         public int UsuarioId { get; set; }

@@ -10,6 +10,5 @@ namespace ProStock.API.Dtos
         public string Uf { get; set; }
         public string Complemento { get; set; }
         public string Pais { get; set; }
-        public bool Ativo { get; set; }
     }
 }

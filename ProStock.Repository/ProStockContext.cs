@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProStock.Domain;
+using ProStock.Repository.Configuration;
 
 namespace ProStock.Repository
 {
@@ -19,12 +20,20 @@ namespace ProStock.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Produto>()
-            .Property(p => p.ValorUnit)
-            .HasColumnType("decimal(10,2)");
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new ClienteConfiguration());
+            modelBuilder.ApplyConfiguration(new EnderecoConfiguration());
+            modelBuilder.ApplyConfiguration(new EstoqueConfiguration());
+            modelBuilder.ApplyConfiguration(new LojaConfiguration());
+            modelBuilder.ApplyConfiguration(new PessoaConfiguration());
+            modelBuilder.ApplyConfiguration(new ProdutoConfiguration());
+            modelBuilder.ApplyConfiguration(new TipoUsuarioConfiguration());
+            modelBuilder.ApplyConfiguration(new UsuarioConfiguration());
+            modelBuilder.ApplyConfiguration(new VendaConfiguration());
             /*
                 sobrescrevendo o metodo
-                especificando a relação (n,n) Evento - Palestrante 
+                especificando a relação (n,n) Produto - Venda 
             */
             modelBuilder.Entity<ProdutoVenda>()
             .HasKey(PV => new { PV.ProdutoId, PV.VendaId });

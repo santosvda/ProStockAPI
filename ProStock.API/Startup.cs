@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using ProStock.Repository;
 using ProStock.Repository.Interfaces;
 using ProStock.Repository.Repositorys;
@@ -35,9 +37,20 @@ namespace ProStock.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
             //configuração de conexão com o banco
-            services.AddDbContext<ProStockContext>(
-                x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ProStockContext>(options =>
+            {
+                //options.UseLazyLoadingProxies().UseMySql(Configuration.GetConnectionString(Configuration["Database:DefaultConnection"]), x =>
+                options.UseMySql(Configuration.GetConnectionString(Configuration["Database:DefaultConnection"]), x =>
+                {
+                    x.ServerVersion(new Version(5, 7, 21), ServerType.MySql);
+                    x.MigrationsHistoryTable("EfMigrations");
+                    x.MigrationsAssembly(migrationsAssembly);
+                    
+                });
+            });
 
             //Configurando JWT (obs: bearer = portador en-pt)
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -103,6 +116,8 @@ namespace ProStock.API
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
+            InitializeDatabase(app);
 
             app.UseAuthentication(); //informa que a api precisa ser autenticada
 
@@ -116,6 +131,15 @@ namespace ProStock.API
                 c.RoutePrefix = "swagger";
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
             });
+        }
+
+        private void InitializeDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var audieDbContext = serviceScope.ServiceProvider.GetRequiredService<ProStockContext>();
+                audieDbContext.Database.Migrate();
+            }
         }
     }
 }

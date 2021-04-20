@@ -2,234 +2,243 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ProStock.Repository.Migrations
+namespace ProStock.API.Migrations
 {
     public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Pessoas",
+                name: "Pessoa",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(nullable: true),
-                    Cpf = table.Column<string>(nullable: true),
-                    Telefone = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Ativo = table.Column<bool>(nullable: false),
+                    Ativo = table.Column<bool>(nullable: false, defaultValue: true),
                     DataInclusao = table.Column<DateTime>(nullable: false),
-                    DataExclusao = table.Column<DateTime>(nullable: false)
+                    DataExclusao = table.Column<DateTime>(nullable: true),
+                    Nome = table.Column<string>(maxLength: 70, nullable: true),
+                    Cpf = table.Column<string>(maxLength: 11, nullable: true),
+                    Telefone = table.Column<string>(maxLength: 14, nullable: true),
+                    Email = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pessoas", x => x.Id);
+                    table.PrimaryKey("PK_Pessoa", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TiposUsuarios",
+                name: "TipoUsuario",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Descricao = table.Column<string>(nullable: true),
-                    Ativo = table.Column<bool>(nullable: false)
+                    Ativo = table.Column<bool>(nullable: false, defaultValue: true),
+                    DataInclusao = table.Column<DateTime>(nullable: false),
+                    DataExclusao = table.Column<DateTime>(nullable: true),
+                    Descricao = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TiposUsuarios", x => x.Id);
+                    table.PrimaryKey("PK_TipoUsuario", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Clientes",
+                name: "Cliente",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Ativo = table.Column<bool>(nullable: false),
+                    Ativo = table.Column<bool>(nullable: false, defaultValue: true),
+                    DataInclusao = table.Column<DateTime>(nullable: false),
+                    DataExclusao = table.Column<DateTime>(nullable: true),
                     PessoaId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clientes", x => x.Id);
+                    table.PrimaryKey("PK_Cliente", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Clientes_Pessoas_PessoaId",
+                        name: "FK_Cliente_Pessoa_PessoaId",
                         column: x => x.PessoaId,
-                        principalTable: "Pessoas",
+                        principalTable: "Pessoa",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Enderecos",
+                name: "Endereco",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Cep = table.Column<string>(nullable: true),
-                    Rua = table.Column<string>(nullable: true),
-                    Bairro = table.Column<string>(nullable: true),
-                    Cidade = table.Column<string>(nullable: true),
-                    Uf = table.Column<string>(nullable: true),
-                    Complemento = table.Column<string>(nullable: true),
-                    Pais = table.Column<string>(nullable: true),
-                    Ativo = table.Column<bool>(nullable: false),
+                    Ativo = table.Column<bool>(nullable: false, defaultValue: true),
                     DataInclusao = table.Column<DateTime>(nullable: false),
                     DataExclusao = table.Column<DateTime>(nullable: true),
+                    Cep = table.Column<string>(maxLength: 9, nullable: true),
+                    Rua = table.Column<string>(maxLength: 50, nullable: true),
+                    Bairro = table.Column<string>(maxLength: 50, nullable: true),
+                    Cidade = table.Column<string>(maxLength: 50, nullable: true),
+                    Numero = table.Column<int>(nullable: false, defaultValue: 0),
+                    Uf = table.Column<string>(maxLength: 2, nullable: true),
+                    Complemento = table.Column<string>(maxLength: 70, nullable: true),
+                    Pais = table.Column<string>(maxLength: 50, nullable: true),
                     PessoaId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enderecos", x => x.Id);
+                    table.PrimaryKey("PK_Endereco", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Enderecos_Pessoas_PessoaId",
+                        name: "FK_Endereco_Pessoa_PessoaId",
                         column: x => x.PessoaId,
-                        principalTable: "Pessoas",
+                        principalTable: "Pessoa",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lojas",
+                name: "Loja",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Descricao = table.Column<string>(nullable: true),
-                    Telefone = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Ativo = table.Column<bool>(nullable: false),
+                    Ativo = table.Column<bool>(nullable: false, defaultValue: true),
                     DataInclusao = table.Column<DateTime>(nullable: false),
                     DataExclusao = table.Column<DateTime>(nullable: true),
+                    Descricao = table.Column<string>(maxLength: 70, nullable: true),
+                    Telefone = table.Column<string>(maxLength: 14, nullable: true),
+                    Email = table.Column<string>(maxLength: 50, nullable: true),
                     EnderecoId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lojas", x => x.Id);
+                    table.PrimaryKey("PK_Loja", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Lojas_Enderecos_EnderecoId",
+                        name: "FK_Loja_Endereco_EnderecoId",
                         column: x => x.EnderecoId,
-                        principalTable: "Enderecos",
+                        principalTable: "Endereco",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Usuarios",
+                name: "Usuario",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Login = table.Column<string>(nullable: true),
-                    Senha = table.Column<string>(nullable: true),
-                    Ativo = table.Column<bool>(nullable: false),
+                    Ativo = table.Column<bool>(nullable: false, defaultValue: true),
                     DataInclusao = table.Column<DateTime>(nullable: false),
                     DataExclusao = table.Column<DateTime>(nullable: true),
+                    Login = table.Column<string>(maxLength: 20, nullable: true),
+                    Senha = table.Column<string>(maxLength: 20, nullable: true),
                     PessoaId = table.Column<int>(nullable: true),
                     TipoUsuarioId = table.Column<int>(nullable: true),
                     LojaId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuarios", x => x.Id);
+                    table.PrimaryKey("PK_Usuario", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Usuarios_Lojas_LojaId",
+                        name: "FK_Usuario_Loja_LojaId",
                         column: x => x.LojaId,
-                        principalTable: "Lojas",
+                        principalTable: "Loja",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Usuarios_Pessoas_PessoaId",
+                        name: "FK_Usuario_Pessoa_PessoaId",
                         column: x => x.PessoaId,
-                        principalTable: "Pessoas",
+                        principalTable: "Pessoa",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Usuarios_TiposUsuarios_TipoUsuarioId",
+                        name: "FK_Usuario_TipoUsuario_TipoUsuarioId",
                         column: x => x.TipoUsuarioId,
-                        principalTable: "TiposUsuarios",
+                        principalTable: "TipoUsuario",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Produtos",
+                name: "Produto",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(nullable: true),
-                    Descricao = table.Column<string>(nullable: true),
-                    Marca = table.Column<string>(nullable: true),
-                    ValorUnit = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Ativo = table.Column<bool>(nullable: false),
+                    Ativo = table.Column<bool>(nullable: false, defaultValue: true),
                     DataInclusao = table.Column<DateTime>(nullable: false),
                     DataExclusao = table.Column<DateTime>(nullable: true),
+                    Nome = table.Column<string>(maxLength: 70, nullable: true),
+                    Descricao = table.Column<string>(maxLength: 200, nullable: true),
+                    Marca = table.Column<string>(maxLength: 50, nullable: true),
+                    ValorUnit = table.Column<decimal>(nullable: false, defaultValue: 0m),
                     UsuarioId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Produtos", x => x.Id);
+                    table.PrimaryKey("PK_Produto", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Produtos_Usuarios_UsuarioId",
+                        name: "FK_Produto_Usuario_UsuarioId",
                         column: x => x.UsuarioId,
-                        principalTable: "Usuarios",
+                        principalTable: "Usuario",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vendas",
+                name: "Venda",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Ativo = table.Column<bool>(nullable: false, defaultValue: true),
+                    DataInclusao = table.Column<DateTime>(nullable: false),
+                    DataExclusao = table.Column<DateTime>(nullable: true),
                     ValorTotal = table.Column<decimal>(nullable: false),
                     Data = table.Column<DateTime>(nullable: false),
-                    Ativo = table.Column<bool>(nullable: false),
-                    Status = table.Column<string>(nullable: true),
-                    DataExclusao = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(maxLength: 50, nullable: true),
+                    Descricao = table.Column<string>(maxLength: 50, nullable: true),
                     ClienteId = table.Column<int>(nullable: false),
                     UsuarioId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vendas", x => x.Id);
+                    table.PrimaryKey("PK_Venda", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vendas_Clientes_ClienteId",
+                        name: "FK_Venda_Cliente_ClienteId",
                         column: x => x.ClienteId,
-                        principalTable: "Clientes",
+                        principalTable: "Cliente",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Vendas_Usuarios_UsuarioId",
+                        name: "FK_Venda_Usuario_UsuarioId",
                         column: x => x.UsuarioId,
-                        principalTable: "Usuarios",
+                        principalTable: "Usuario",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Estoques",
+                name: "Estoque",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    QtdAtual = table.Column<int>(nullable: false),
-                    QtdMinima = table.Column<int>(nullable: false),
-                    QtdReservada = table.Column<int>(nullable: false),
-                    Ativo = table.Column<bool>(nullable: false),
+                    Ativo = table.Column<bool>(nullable: false, defaultValue: true),
+                    DataInclusao = table.Column<DateTime>(nullable: false),
+                    DataExclusao = table.Column<DateTime>(nullable: true),
+                    QtdAtual = table.Column<int>(nullable: false, defaultValue: 0),
+                    QtdMinima = table.Column<int>(nullable: false, defaultValue: 0),
+                    QtdReservada = table.Column<int>(nullable: false, defaultValue: 0),
                     DataAlteracao = table.Column<DateTime>(nullable: false),
                     ProdutoId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Estoques", x => x.Id);
+                    table.PrimaryKey("PK_Estoque", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Estoques_Produtos_ProdutoId",
+                        name: "FK_Estoque_Produto_ProdutoId",
                         column: x => x.ProdutoId,
-                        principalTable: "Produtos",
+                        principalTable: "Produto",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -245,42 +254,72 @@ namespace ProStock.Repository.Migrations
                 {
                     table.PrimaryKey("PK_ProdutosVendas", x => new { x.ProdutoId, x.VendaId });
                     table.ForeignKey(
-                        name: "FK_ProdutosVendas_Produtos_ProdutoId",
+                        name: "FK_ProdutosVendas_Produto_ProdutoId",
                         column: x => x.ProdutoId,
-                        principalTable: "Produtos",
+                        principalTable: "Produto",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProdutosVendas_Vendas_VendaId",
+                        name: "FK_ProdutosVendas_Venda_VendaId",
                         column: x => x.VendaId,
-                        principalTable: "Vendas",
+                        principalTable: "Venda",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clientes_PessoaId",
-                table: "Clientes",
+                name: "IX_Cliente_Ativo",
+                table: "Cliente",
+                column: "Ativo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cliente_PessoaId",
+                table: "Cliente",
                 column: "PessoaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enderecos_PessoaId",
-                table: "Enderecos",
+                name: "IX_Endereco_Ativo",
+                table: "Endereco",
+                column: "Ativo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Endereco_PessoaId",
+                table: "Endereco",
                 column: "PessoaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Estoques_ProdutoId",
-                table: "Estoques",
+                name: "IX_Estoque_Ativo",
+                table: "Estoque",
+                column: "Ativo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Estoque_ProdutoId",
+                table: "Estoque",
                 column: "ProdutoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lojas_EnderecoId",
-                table: "Lojas",
+                name: "IX_Loja_Ativo",
+                table: "Loja",
+                column: "Ativo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Loja_EnderecoId",
+                table: "Loja",
                 column: "EnderecoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Produtos_UsuarioId",
-                table: "Produtos",
+                name: "IX_Pessoa_Ativo",
+                table: "Pessoa",
+                column: "Ativo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Produto_Ativo",
+                table: "Produto",
+                column: "Ativo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Produto_UsuarioId",
+                table: "Produto",
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
@@ -289,62 +328,77 @@ namespace ProStock.Repository.Migrations
                 column: "VendaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_LojaId",
-                table: "Usuarios",
+                name: "IX_TipoUsuario_Ativo",
+                table: "TipoUsuario",
+                column: "Ativo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuario_Ativo",
+                table: "Usuario",
+                column: "Ativo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuario_LojaId",
+                table: "Usuario",
                 column: "LojaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_PessoaId",
-                table: "Usuarios",
+                name: "IX_Usuario_PessoaId",
+                table: "Usuario",
                 column: "PessoaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_TipoUsuarioId",
-                table: "Usuarios",
+                name: "IX_Usuario_TipoUsuarioId",
+                table: "Usuario",
                 column: "TipoUsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vendas_ClienteId",
-                table: "Vendas",
+                name: "IX_Venda_Ativo",
+                table: "Venda",
+                column: "Ativo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Venda_ClienteId",
+                table: "Venda",
                 column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vendas_UsuarioId",
-                table: "Vendas",
+                name: "IX_Venda_UsuarioId",
+                table: "Venda",
                 column: "UsuarioId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Estoques");
+                name: "Estoque");
 
             migrationBuilder.DropTable(
                 name: "ProdutosVendas");
 
             migrationBuilder.DropTable(
-                name: "Produtos");
+                name: "Produto");
 
             migrationBuilder.DropTable(
-                name: "Vendas");
+                name: "Venda");
 
             migrationBuilder.DropTable(
-                name: "Clientes");
+                name: "Cliente");
 
             migrationBuilder.DropTable(
-                name: "Usuarios");
+                name: "Usuario");
 
             migrationBuilder.DropTable(
-                name: "Lojas");
+                name: "Loja");
 
             migrationBuilder.DropTable(
-                name: "TiposUsuarios");
+                name: "TipoUsuario");
 
             migrationBuilder.DropTable(
-                name: "Enderecos");
+                name: "Endereco");
 
             migrationBuilder.DropTable(
-                name: "Pessoas");
+                name: "Pessoa");
         }
     }
 }

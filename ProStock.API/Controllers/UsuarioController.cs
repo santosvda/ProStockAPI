@@ -89,7 +89,7 @@ namespace ProStock.API.Controllers
             {
                 var usuario = _mapper.Map<Usuario>(model);
 
-                model.DataInclusao = DateTime.Now;
+                usuario.DataInclusao = DateTime.Now;
                 _usuarioRepository.Add(usuario);
 
                 if (await _usuarioRepository.SaveChangesAsync())
@@ -111,10 +111,10 @@ namespace ProStock.API.Controllers
                 var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
                 if (usuario == null) return NotFound();
 
-                model.DataInclusao = usuario.DataInclusao;
+                var usuarioNew = _mapper.Map<Usuario>(model);
 
-                if (model.Ativo == false)
-                    model.DataExclusao = DateTime.Now;
+
+                usuarioNew.DataInclusao = usuario.DataInclusao;
 
                 _usuarioRepository.Update(model);
 
@@ -156,11 +156,13 @@ namespace ProStock.API.Controllers
 
         [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(Usuario userLogin)
+        public async Task<IActionResult> Login(UsuarioLoginDto userLogin)
         {
             try
             {
-                var usuarioLogin = await _usuarioRepository.Login(userLogin);
+                var usuario = _mapper.Map<Usuario>(userLogin);
+
+                var usuarioLogin = await _usuarioRepository.Login(usuario);
                 if (usuarioLogin == null) return Unauthorized();
 
                 return Ok(new

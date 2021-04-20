@@ -20,3 +20,6 @@ Strings Teste!
 Server=db;Port:3306;DataBase=prostockdev;Uid=root;Pwd=docker;SslMode=none;
 
 docker-compose up -d --build
+
+Criar nova migration
+dotnet ef migrations add Migration01 --context ProStock.Repository.ProStockContext -o Migrations

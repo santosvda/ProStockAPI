@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProStock.Repository;
 
-namespace ProStock.Repository.Migrations
+namespace ProStock.API.Migrations
 {
     [DbContext(typeof(ProStockContext))]
-    [Migration("20200718193017_init")]
+    [Migration("20210419232551_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,15 +24,23 @@ namespace ProStock.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Ativo");
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime?>("DataExclusao");
+
+                    b.Property<DateTime>("DataInclusao");
 
                     b.Property<int>("PessoaId");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Ativo");
+
                     b.HasIndex("PessoaId");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Cliente");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Endereco", b =>
@@ -40,33 +48,48 @@ namespace ProStock.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Ativo");
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
-                    b.Property<string>("Bairro");
+                    b.Property<string>("Bairro")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Cep");
+                    b.Property<string>("Cep")
+                        .HasMaxLength(9);
 
-                    b.Property<string>("Cidade");
+                    b.Property<string>("Cidade")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Complemento");
+                    b.Property<string>("Complemento")
+                        .HasMaxLength(70);
 
                     b.Property<DateTime?>("DataExclusao");
 
                     b.Property<DateTime>("DataInclusao");
 
-                    b.Property<string>("Pais");
+                    b.Property<int>("Numero")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("Pais")
+                        .HasMaxLength(50);
 
                     b.Property<int?>("PessoaId");
 
-                    b.Property<string>("Rua");
+                    b.Property<string>("Rua")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Uf");
+                    b.Property<string>("Uf")
+                        .HasMaxLength(2);
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Ativo");
+
                     b.HasIndex("PessoaId");
 
-                    b.ToTable("Enderecos");
+                    b.ToTable("Endereco");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Estoque", b =>
@@ -74,23 +97,37 @@ namespace ProStock.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Ativo");
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
                     b.Property<DateTime>("DataAlteracao");
 
+                    b.Property<DateTime?>("DataExclusao");
+
+                    b.Property<DateTime>("DataInclusao");
+
                     b.Property<int>("ProdutoId");
 
-                    b.Property<int>("QtdAtual");
+                    b.Property<int>("QtdAtual")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
 
-                    b.Property<int>("QtdMinima");
+                    b.Property<int>("QtdMinima")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
 
-                    b.Property<int>("QtdReservada");
+                    b.Property<int>("QtdReservada")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Ativo");
+
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("Estoques");
+                    b.ToTable("Estoque");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Loja", b =>
@@ -98,25 +135,32 @@ namespace ProStock.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Ativo");
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
                     b.Property<DateTime?>("DataExclusao");
 
                     b.Property<DateTime>("DataInclusao");
 
-                    b.Property<string>("Descricao");
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(70);
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .HasMaxLength(50);
 
                     b.Property<int?>("EnderecoId");
 
-                    b.Property<string>("Telefone");
+                    b.Property<string>("Telefone")
+                        .HasMaxLength(14);
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Ativo");
+
                     b.HasIndex("EnderecoId");
 
-                    b.ToTable("Lojas");
+                    b.ToTable("Loja");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Pessoa", b =>
@@ -124,23 +168,31 @@ namespace ProStock.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Ativo");
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
-                    b.Property<string>("Cpf");
+                    b.Property<string>("Cpf")
+                        .HasMaxLength(11);
 
-                    b.Property<DateTime>("DataExclusao");
+                    b.Property<DateTime?>("DataExclusao");
 
                     b.Property<DateTime>("DataInclusao");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Nome");
+                    b.Property<string>("Nome")
+                        .HasMaxLength(70);
 
-                    b.Property<string>("Telefone");
+                    b.Property<string>("Telefone")
+                        .HasMaxLength(14);
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pessoas");
+                    b.HasIndex("Ativo");
+
+                    b.ToTable("Pessoa");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Produto", b =>
@@ -148,28 +200,36 @@ namespace ProStock.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Ativo");
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
                     b.Property<DateTime?>("DataExclusao");
 
                     b.Property<DateTime>("DataInclusao");
 
-                    b.Property<string>("Descricao");
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(200);
 
-                    b.Property<string>("Marca");
+                    b.Property<string>("Marca")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Nome");
+                    b.Property<string>("Nome")
+                        .HasMaxLength(70);
 
                     b.Property<int?>("UsuarioId");
 
                     b.Property<decimal>("ValorUnit")
-                        .HasColumnType("decimal(10,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0m);
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Ativo");
+
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Produtos");
+                    b.ToTable("Produto");
                 });
 
             modelBuilder.Entity("ProStock.Domain.ProdutoVenda", b =>
@@ -190,13 +250,22 @@ namespace ProStock.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Ativo");
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
-                    b.Property<string>("Descricao");
+                    b.Property<DateTime?>("DataExclusao");
+
+                    b.Property<DateTime>("DataInclusao");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
-                    b.ToTable("TiposUsuarios");
+                    b.HasIndex("Ativo");
+
+                    b.ToTable("TipoUsuario");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Usuario", b =>
@@ -204,23 +273,29 @@ namespace ProStock.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Ativo");
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
                     b.Property<DateTime?>("DataExclusao");
 
                     b.Property<DateTime>("DataInclusao");
 
-                    b.Property<string>("Login");
+                    b.Property<string>("Login")
+                        .HasMaxLength(20);
 
                     b.Property<int?>("LojaId");
 
                     b.Property<int?>("PessoaId");
 
-                    b.Property<string>("Senha");
+                    b.Property<string>("Senha")
+                        .HasMaxLength(20);
 
                     b.Property<int?>("TipoUsuarioId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Ativo");
 
                     b.HasIndex("LojaId");
 
@@ -228,7 +303,7 @@ namespace ProStock.Repository.Migrations
 
                     b.HasIndex("TipoUsuarioId");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuario");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Venda", b =>
@@ -236,7 +311,9 @@ namespace ProStock.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Ativo");
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
                     b.Property<int>("ClienteId");
 
@@ -244,7 +321,13 @@ namespace ProStock.Repository.Migrations
 
                     b.Property<DateTime?>("DataExclusao");
 
-                    b.Property<string>("Status");
+                    b.Property<DateTime>("DataInclusao");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(50);
 
                     b.Property<int>("UsuarioId");
 
@@ -252,11 +335,13 @@ namespace ProStock.Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Ativo");
+
                     b.HasIndex("ClienteId");
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Vendas");
+                    b.ToTable("Venda");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Cliente", b =>
