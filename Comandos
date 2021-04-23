@@ -23,3 +23,6 @@ docker-compose up -d --build
 
 Criar nova migration
 dotnet ef migrations add Migration01 --context ProStock.Repository.ProStockContext -o Migrations
+
+
+docker build -t prostock/prostockapi .

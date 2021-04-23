@@ -10,6 +10,6 @@ namespace ProStock.API.Dtos
         public int QtdReservada { get; set; }
         public DateTime DataAlteracao { get; set; }
         public int ProdutoId { get; set; }
-        public ProdutoDto Produto { get; set; }
+        public ProdutoDto Produto { get;}
     }
 }

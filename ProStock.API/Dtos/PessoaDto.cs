@@ -9,6 +9,6 @@ namespace ProStock.API.Dtos
         public string Cpf { get; set; }
         public string Telefone { get; set; }
         public string Email { get; set; }
-        public List<EnderecoDto> Enderecos { get; set; }
+        public List<EnderecoDto> Enderecos { get; }
     }
 }
