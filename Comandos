@@ -26,3 +26,4 @@ dotnet ef migrations add Migration01 --context ProStock.Repository.ProStockConte
 
 
 docker build -t prostock/prostockapi .
+
