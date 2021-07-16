@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProStock.API.Dtos;
 using ProStock.Domain;
 using ProStock.Repository;
 using ProStock.Repository.Interfaces;
@@ -14,8 +16,10 @@ namespace ProStock.API.Controllers
     public class LojaController : ControllerBase //herda para trabalhar com http e etc
     {
         private readonly ILojaRepository _lojaRepository;
-        public LojaController(ILojaRepository lojaRepository)
+        private readonly IMapper _mapper;
+        public LojaController(ILojaRepository lojaRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _lojaRepository = lojaRepository;
         }
         [HttpGet]// api/Loja
@@ -23,9 +27,11 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var loja = await _lojaRepository.GetAllLojaAsync();
-                
-                return Ok(loja); 
+                var lojas = await _lojaRepository.GetAllLojaAsync();
+
+                 var results = _mapper.Map<LojaDto[]>(lojas);
+
+                return Ok(results);
             }
             catch (System.Exception)
             {
@@ -37,8 +43,11 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var loja = await _lojaRepository.GetLojaAsyncById(LojaId);              
-                return Ok(loja); 
+                var loja = await _lojaRepository.GetLojaAsyncById(LojaId);
+
+                var results = _mapper.Map<LojaDto>(loja);
+                
+                return Ok(results);
             }
             catch (System.Exception)
             {
@@ -50,8 +59,11 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var loja = await _lojaRepository.GetAllLojaAsyncByDescricao(descricao);              
-                return Ok(loja); 
+                var loja = await _lojaRepository.GetAllLojaAsyncByDescricao(descricao);
+
+                var results = _mapper.Map<LojaDto[]>(loja);
+                
+                return Ok(results);
             }
             catch (System.Exception)
             {
@@ -61,15 +73,16 @@ namespace ProStock.API.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post(Loja model)
+        public async Task<IActionResult> Post(LojaDto model)
         {
             try
             {
-                model.DataInclusao = DateTime.Now;
-                
-                _lojaRepository.Add(model);
-                
-                if(await _lojaRepository.SaveChangesAsync())
+                var loja = _mapper.Map<Loja>(model);
+
+                loja.DataInclusao = DateTime.Now;
+                _lojaRepository.Add(loja);
+
+                if (await _lojaRepository.SaveChangesAsync())
                 {
                     return Created($"/api/loja/{model.Id}", model);
                 }
@@ -81,31 +94,33 @@ namespace ProStock.API.Controllers
             return BadRequest();
         }
         [HttpPut("{LojaId}")]
-        public async Task<IActionResult> Put(int LojaId, Loja model)
+        public async Task<IActionResult> Put(int LojaId, LojaDto model)
         {
             try
             {
                 var loja = await _lojaRepository.GetLojaAsyncById(LojaId);
-                if(loja == null) return NotFound();
+                if (loja == null) return NotFound();
 
-                model.DataInclusao = loja.DataInclusao;
+                var lojaNew = _mapper.Map<Loja>(model);
 
-                if(model.Ativo == false)
-                    model.DataExclusao = DateTime.Now;
+                lojaNew.Id = LojaId;
+                lojaNew.DataInclusao = loja.DataInclusao;
+                lojaNew.DataExclusao = loja.DataExclusao;
+                lojaNew.Ativo = loja.Ativo;
 
-                _lojaRepository.Update(model);
-                
-                if(await _lojaRepository.SaveChangesAsync())
+                _lojaRepository.Update(lojaNew);
+
+                if (await _lojaRepository.SaveChangesAsync())
                 {
                     return Created($"/api/loja/{model.Id}", model);
-                }                
+                }
             }
             catch (System.Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou " + ex.Message);
-            }   
+            }
 
-            return BadRequest();         
+            return BadRequest();
         }
 
         [HttpDelete("{LojaId}")]
@@ -114,21 +129,24 @@ namespace ProStock.API.Controllers
             try
             {
                 var loja = await _lojaRepository.GetLojaAsyncById(LojaId);
-                if(loja == null) return NotFound();
+                if (loja == null) return NotFound();
 
-                _lojaRepository.Delete(loja);
-                
-                if(await _lojaRepository.SaveChangesAsync())
+                loja.Ativo = false;
+                loja.DataExclusao = DateTime.Now;
+
+                _lojaRepository.Update(loja);
+
+                if (await _lojaRepository.SaveChangesAsync())
                 {
                     return Ok();
-                }                
+                }
             }
             catch (System.Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
-            }   
+            }
 
-            return BadRequest();         
+            return BadRequest();
         }
     }
 }

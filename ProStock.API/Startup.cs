@@ -92,7 +92,6 @@ namespace ProStock.API
             services.AddScoped<ILojaRepository, LojaRepository>();
             services.AddScoped<IPessoaRepository, PessoaRepository>();
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
-            services.AddScoped<ITipoUsuarioRepository, TipoUsuarioRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IVendaRepository, VendaRepository>();
             //Configuração de permisão - CORS

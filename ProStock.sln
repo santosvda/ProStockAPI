@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProStock.Domain", "ProStock
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProStock.Repository", "ProStock.Repository\ProStock.Repository.csproj", "{0500CB40-B45B-49A6-B54A-D981D52C0EFA}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{45A236AC-35D2-4CFB-8E24-98AF2413D908}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,18 +55,6 @@ Global
 		{0500CB40-B45B-49A6-B54A-D981D52C0EFA}.Release|x64.Build.0 = Release|Any CPU
 		{0500CB40-B45B-49A6-B54A-D981D52C0EFA}.Release|x86.ActiveCfg = Release|Any CPU
 		{0500CB40-B45B-49A6-B54A-D981D52C0EFA}.Release|x86.Build.0 = Release|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Debug|x64.Build.0 = Debug|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Debug|x86.Build.0 = Debug|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Release|Any CPU.Build.0 = Release|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Release|x64.ActiveCfg = Release|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Release|x64.Build.0 = Release|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Release|x86.ActiveCfg = Release|Any CPU
-		{45A236AC-35D2-4CFB-8E24-98AF2413D908}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

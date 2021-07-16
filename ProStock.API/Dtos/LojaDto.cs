@@ -9,7 +9,7 @@ namespace ProStock.API.Dtos
         public string Telefone { get; set; }
         public string Email { get; set; }
         public int? EnderecoId { get; set; }
-        public EnderecoDto Endereco { get; }
-        public List<UsuarioDto> Usuarios { get; }
+        public EnderecoDto Endereco { get; set;}
+        //public List<UsuarioDto> Usuarios { get; set;}
     }
 }

@@ -14,7 +14,7 @@ namespace ProStock.Domain
         public string Complemento { get; set; }
         public string Pais { get; set; }
         public int? PessoaId { get; set; }
-        //public Pessoa Pessoa { get; set; }
+        public Pessoa Pessoa { get; set; }
 
     }
 }

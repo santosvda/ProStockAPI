@@ -14,7 +14,6 @@ namespace ProStock.Repository
         public DbSet<Pessoa> Pessoas { get; set; }
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<ProdutoVenda> ProdutosVendas { get; set; }
-        public DbSet<TipoUsuario> TiposUsuarios { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Venda> Vendas { get; set; }
 
@@ -28,7 +27,6 @@ namespace ProStock.Repository
             modelBuilder.ApplyConfiguration(new LojaConfiguration());
             modelBuilder.ApplyConfiguration(new PessoaConfiguration());
             modelBuilder.ApplyConfiguration(new ProdutoConfiguration());
-            modelBuilder.ApplyConfiguration(new TipoUsuarioConfiguration());
             modelBuilder.ApplyConfiguration(new UsuarioConfiguration());
             modelBuilder.ApplyConfiguration(new VendaConfiguration());
             /*

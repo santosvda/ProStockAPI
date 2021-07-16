@@ -1,7 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProStock.API.Dtos;
 using ProStock.Domain;
 using ProStock.Repository;
 using ProStock.Repository.Interfaces;
@@ -13,8 +15,10 @@ namespace ProStock.API.Controllers
     public class ClienteController : ControllerBase //herda para trabalhar com http e etc
     {
         private readonly IClienteRepository _clienteRepository;
-        public ClienteController(IClienteRepository clienteRepository)
+        private readonly IMapper _mapper;
+        public ClienteController(IClienteRepository clienteRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _clienteRepository = clienteRepository;
         }
 
@@ -24,8 +28,10 @@ namespace ProStock.API.Controllers
             try
             {
                 var cliente = await _clienteRepository.GetAllClienteAsync();
-                
-                return Ok(cliente); 
+
+                 var results = _mapper.Map<ClienteDto[]>(cliente);
+
+                return Ok(results);
             }
             catch (System.Exception)
             {
@@ -37,8 +43,11 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var cliente = await _clienteRepository.GetClienteAsyncById(ClienteId);              
-                return Ok(cliente); 
+                var cliente = await _clienteRepository.GetClienteAsyncById(ClienteId);
+                
+                var results = _mapper.Map<ClienteDto>(cliente);
+
+                return Ok(results);
             }
             catch (System.Exception)
             {
@@ -51,8 +60,11 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var cliente = await _clienteRepository.GetClienteAsyncByCpf(cpf);              
-                return Ok(cliente); 
+                var cliente = await _clienteRepository.GetClienteAsyncByCpf(cpf);
+
+                var results = _mapper.Map<ClienteDto>(cliente);
+
+                return Ok(results);
             }
             catch (System.Exception)
             {
@@ -61,14 +73,16 @@ namespace ProStock.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Cliente model)
+        public async Task<IActionResult> Post(ClienteDto model)
         {
             try
-            {   
-                model.Pessoa.DataInclusao = DateTime.Now;
-                _clienteRepository.Add(model);
-                
-                if(await _clienteRepository.SaveChangesAsync())
+            {
+                var cliente = _mapper.Map<Cliente>(model);
+
+                cliente.DataInclusao = DateTime.Now;
+                _clienteRepository.Add(cliente);
+
+                if (await _clienteRepository.SaveChangesAsync())
                 {
                     return Created($"/api/cliente/{model.Id}", model);
                 }
@@ -81,31 +95,33 @@ namespace ProStock.API.Controllers
         }
 
         [HttpPut("{ClienteId}")]
-        public async Task<IActionResult> Put(int ClienteId, Cliente model)
+        public async Task<IActionResult> Put(int ClienteId, ClienteDto model)
         {
             try
             {
                 var cliente = await _clienteRepository.GetClienteAsyncById(ClienteId);
-                if(cliente == null) return NotFound();
+                if (cliente == null) return NotFound();
 
-                //model.Pessoa.DataInclusao = cliente.Pessoa.DataInclusao;
+                var clienteNew = _mapper.Map<Cliente>(model);
 
-                if(model.Ativo == false)
-                    model.Pessoa.DataExclusao = DateTime.Now;
+                clienteNew.Id = ClienteId;
+                clienteNew.DataInclusao = cliente.DataInclusao;
+                clienteNew.DataExclusao = cliente.DataExclusao;
+                clienteNew.Ativo = cliente.Ativo;
 
-                _clienteRepository.Update(model);
-                
-                if(await _clienteRepository.SaveChangesAsync())
+                _clienteRepository.Update(clienteNew);
+
+                if (await _clienteRepository.SaveChangesAsync())
                 {
                     return Created($"/api/cliente/{model.Id}", model);
-                }                
+                }
             }
             catch (System.Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou " + ex.Message);
-            }   
+            }
 
-            return BadRequest();         
+            return BadRequest();
         }
 
         [HttpDelete("{ClienteId}")]
@@ -114,21 +130,24 @@ namespace ProStock.API.Controllers
             try
             {
                 var cliente = await _clienteRepository.GetClienteAsyncById(ClienteId);
-                if(cliente == null) return NotFound();
+                if (cliente == null) return NotFound();
 
-                _clienteRepository.Delete(cliente);
-                
-                if(await _clienteRepository.SaveChangesAsync())
+                cliente.Ativo = false;
+                cliente.DataExclusao = DateTime.Now;
+
+                _clienteRepository.Update(cliente);
+
+                if (await _clienteRepository.SaveChangesAsync())
                 {
                     return Ok();
-                }                
+                }
             }
             catch (System.Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
-            }   
+            }
 
-            return BadRequest();         
+            return BadRequest();
         }
     }
 }

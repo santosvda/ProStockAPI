@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProStock.API.Dtos;
 using ProStock.Domain;
 using ProStock.Repository;
 using ProStock.Repository.Interfaces;
@@ -14,8 +16,10 @@ namespace ProStock.API.Controllers
     public class PessoaController : ControllerBase //herda para trabalhar com http e etc
     {
         private readonly IPessoaRepository _pessoaRepository;
-        public PessoaController(IPessoaRepository repository)
+        private readonly IMapper _mapper;
+        public PessoaController(IPessoaRepository repository, IMapper mapper)
         {
+            _mapper = mapper;
             _pessoaRepository = repository;
         }
 
@@ -25,8 +29,10 @@ namespace ProStock.API.Controllers
             try
             {
                 var pessoa = await _pessoaRepository.GetAllPessoaAsync();
-                
-                return Ok(pessoa); 
+
+                var results = _mapper.Map<PessoaDto[]>(pessoa);
+
+                return Ok(results);
             }
             catch (System.Exception)
             {
@@ -38,8 +44,10 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var pessoa = await _pessoaRepository.GetPessoaAsyncById(pessoaId);              
-                return Ok(pessoa); 
+                var pessoa = await _pessoaRepository.GetPessoaAsyncById(pessoaId);
+                var results = _mapper.Map<PessoaDto>(pessoa);
+
+                return Ok(results);
             }
             catch (System.Exception)
             {
@@ -52,15 +60,16 @@ namespace ProStock.API.Controllers
             try
             {
                 var pessoa = await _pessoaRepository.GetAllPessoaAsyncByName(nome);
+                var results = _mapper.Map<PessoaDto[]>(pessoa);
 
-                return Ok(pessoa); 
+                return Ok(results);
             }
             catch (System.Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
-            }   
+            }
         }
-        
+
         /*[HttpGet("getByCpf/{cpf}")]// api/pessoa/getByCpf/{cpf}
         public async Task<IActionResult> Get(string cpf)
         {
@@ -77,14 +86,16 @@ namespace ProStock.API.Controllers
         }*/
 
         [HttpPost]
-        public async Task<IActionResult> Post(Pessoa model)
+        public async Task<IActionResult> Post(PessoaDto model)
         {
             try
             {
-                model.DataInclusao = DateTime.Now;
-                _pessoaRepository.Add(model);
-                
-                if(await _pessoaRepository.SaveChangesAsync())
+                var pessoa = _mapper.Map<Pessoa>(model);
+
+                pessoa.DataInclusao = DateTime.Now;
+                _pessoaRepository.Add(pessoa);
+
+                if (await _pessoaRepository.SaveChangesAsync())
                 {
                     return Created($"/api/pessoa/{model.Id}", model);
                 }
@@ -97,31 +108,33 @@ namespace ProStock.API.Controllers
         }
 
         [HttpPut("{PessoaId}")]
-        public async Task<IActionResult> Put(int PessoaId, Pessoa model)
+        public async Task<IActionResult> Put(int PessoaId, PessoaDto model)
         {
             try
             {
                 var pessoa = await _pessoaRepository.GetPessoaAsyncById(PessoaId);
-                if(pessoa == null) return NotFound();
+                if (pessoa == null) return NotFound();
 
-                model.DataInclusao = pessoa.DataInclusao;
+                var pessoaNew = _mapper.Map<Pessoa>(model);
 
-                if(model.Ativo == false)
-                    model.DataExclusao = DateTime.Now;
+                pessoaNew.Id = PessoaId;
+                pessoaNew.DataInclusao = pessoa.DataInclusao;
+                pessoaNew.DataExclusao = pessoa.DataExclusao;
+                pessoaNew.Ativo = pessoa.Ativo;
 
-                _pessoaRepository.Update(model);
-                
-                if(await _pessoaRepository.SaveChangesAsync())
+                _pessoaRepository.Update(pessoaNew);
+
+                if (await _pessoaRepository.SaveChangesAsync())
                 {
                     return Created($"/api/pessoa/{model.Id}", model);
-                }                
+                }
             }
             catch (System.Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou " + ex.Message);
-            }   
+            }
 
-            return BadRequest();         
+            return BadRequest();
         }
 
         [HttpDelete("{PessoaId}")]
@@ -130,21 +143,24 @@ namespace ProStock.API.Controllers
             try
             {
                 var pessoa = await _pessoaRepository.GetPessoaAsyncById(PessoaId);
-                if(pessoa == null) return NotFound();
+                if (pessoa == null) return NotFound();
 
-                _pessoaRepository.Delete(pessoa);
-                
-                if(await _pessoaRepository.SaveChangesAsync())
+                pessoa.Ativo = false;
+                pessoa.DataExclusao = DateTime.Now;
+
+                _pessoaRepository.Update(pessoa);
+
+                if (await _pessoaRepository.SaveChangesAsync())
                 {
                     return Ok();
-                }                
+                }
             }
             catch (System.Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
-            }   
+            }
 
-            return BadRequest();         
+            return BadRequest();
         }
     }
 }

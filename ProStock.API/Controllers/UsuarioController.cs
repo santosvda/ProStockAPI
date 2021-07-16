@@ -37,7 +37,7 @@ namespace ProStock.API.Controllers
             {
                 var usuarios = await _usuarioRepository.GetAllUsuarioAsync();
 
-                var results = _mapper.Map<UsuarioDto[]>(usuarios);//_mapper.Map<EventoDto[]>(eventos); works too!
+                var results = _mapper.Map<UsuarioDto[]>(usuarios);
 
                 return Ok(results);
             }
@@ -54,7 +54,7 @@ namespace ProStock.API.Controllers
             {
                 var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
 
-                var results = _mapper.Map<UsuarioDto[]>(usuario);//_mapper.Map<EventoDto[]>(eventos); works too!
+                var results = _mapper.Map<UsuarioDto>(usuario);
 
                 return Ok(results);
             }
@@ -71,7 +71,7 @@ namespace ProStock.API.Controllers
             {
                 var usuario = await _usuarioRepository.GetAllUsuarioAsyncByLogin(Login);
 
-                var results = _mapper.Map<UsuarioDto[]>(usuario);//_mapper.Map<EventoDto[]>(eventos); works too!
+                var results = _mapper.Map<UsuarioDto[]>(usuario);
 
                 return Ok(results);
             }
@@ -82,7 +82,6 @@ namespace ProStock.API.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Post(UsuarioDto model)
         {
             try
@@ -113,10 +112,12 @@ namespace ProStock.API.Controllers
 
                 var usuarioNew = _mapper.Map<Usuario>(model);
 
-
+                usuarioNew.Id = UsuarioId;
                 usuarioNew.DataInclusao = usuario.DataInclusao;
+                usuarioNew.DataExclusao = usuario.DataExclusao;
+                usuarioNew.Ativo = usuario.Ativo;
 
-                _usuarioRepository.Update(model);
+                _usuarioRepository.Update(usuarioNew);
 
                 if (await _usuarioRepository.SaveChangesAsync())
                 {
@@ -139,7 +140,10 @@ namespace ProStock.API.Controllers
                 var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
                 if (usuario == null) return NotFound();
 
-                _usuarioRepository.Delete(usuario);
+                usuario.Ativo = false;
+                usuario.DataExclusao = DateTime.Now;
+
+                _usuarioRepository.Update(usuario);
 
                 if (await _usuarioRepository.SaveChangesAsync())
                 {
