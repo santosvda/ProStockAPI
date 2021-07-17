@@ -35,5 +35,39 @@ namespace ProStock.Repository.Repositorys
         {
             return (await _context.SaveChangesAsync()) > 0;
         }
+        public async Task<Venda[]> GetAllVendasAsync(){
+            IQueryable<Venda> query = _context.Vendas;
+
+            query = query.AsNoTracking().OrderBy(p => p.Id);
+
+            return await query.ToArrayAsync();
+        }
+        public async Task<Venda[]> GetAllVendasAsyncByUserId (int userId){
+            IQueryable<Venda> query = _context.Vendas;
+
+            query = query.AsNoTracking().OrderByDescending(p => p.DataExclusao)
+            .Where(p => p.UsuarioId == userId);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Venda[]> GetAllVendasAsyncByClientId (int clientId){
+            IQueryable<Venda> query = _context.Vendas;
+
+            query = query.AsNoTracking().OrderByDescending(p => p.DataExclusao)
+            .Where(p => p.ClienteId == clientId);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Venda> GetVendasAsyncById (int VendaId){
+            IQueryable<Venda> query = _context.Vendas;
+
+            query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
+            .Where(p => p.Id == VendaId);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
     }
 }

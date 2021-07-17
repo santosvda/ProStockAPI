@@ -219,6 +219,7 @@ namespace ProStock.API.Migrations
 
                     b.Property<decimal>("ValorUnit")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(10, 2)")
                         .HasDefaultValue(0m);
 
                     b.HasKey("Id");
@@ -235,6 +236,8 @@ namespace ProStock.API.Migrations
                     b.Property<int>("ProdutoId");
 
                     b.Property<int>("VendaId");
+
+                    b.Property<int>("Quantidade");
 
                     b.HasKey("ProdutoId", "VendaId");
 
@@ -282,6 +285,9 @@ namespace ProStock.API.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<decimal>("Acrescimo")
+                        .HasColumnType("decimal(10, 2)");
+
                     b.Property<bool>("Ativo")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(true);
@@ -294,15 +300,22 @@ namespace ProStock.API.Migrations
 
                     b.Property<DateTime>("DataInclusao");
 
+                    b.Property<decimal>("Desconto")
+                        .HasColumnType("decimal(10, 2)");
+
                     b.Property<string>("Descricao")
                         .HasMaxLength(50);
+
+                    b.Property<decimal>("Frete")
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<string>("Status")
                         .HasMaxLength(50);
 
                     b.Property<int>("UsuarioId");
 
-                    b.Property<decimal>("ValorTotal");
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("Id");
 
@@ -325,7 +338,7 @@ namespace ProStock.API.Migrations
 
             modelBuilder.Entity("ProStock.Domain.Endereco", b =>
                 {
-                    b.HasOne("ProStock.Domain.Pessoa")
+                    b.HasOne("ProStock.Domain.Pessoa", "Pessoa")
                         .WithMany("Enderecos")
                         .HasForeignKey("PessoaId");
                 });
@@ -367,7 +380,7 @@ namespace ProStock.API.Migrations
 
             modelBuilder.Entity("ProStock.Domain.Usuario", b =>
                 {
-                    b.HasOne("ProStock.Domain.Loja")
+                    b.HasOne("ProStock.Domain.Loja", "Loja")
                         .WithMany("Usuarios")
                         .HasForeignKey("LojaId");
 

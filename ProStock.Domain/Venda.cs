@@ -7,6 +7,9 @@ namespace ProStock.Domain
     {
         public int Id { get; set; }
         public decimal ValorTotal { get; set; }
+        public decimal Desconto { get; set; }
+        public decimal Acrescimo { get; set; }
+        public decimal Frete { get; set; }
         public DateTime Data { get; set; }
         public string Status { get; set; }
         public string Descricao { get; set; }

@@ -9,9 +9,8 @@ namespace ProStock.Repository.Configuration
         {
             builder.ToTable("Usuario");
             builder.HasKey(p => p.Id);
-            builder.Property(p => p.Login).HasMaxLength(20);
             builder.Property(p => p.Senha).HasMaxLength(20);
-
+            builder.Property(p => p.Login).HasMaxLength(20);
 
             builder.Property(p => p.Ativo).HasDefaultValue(true);
             builder.HasIndex(p => p.Ativo).IsUnique(false);

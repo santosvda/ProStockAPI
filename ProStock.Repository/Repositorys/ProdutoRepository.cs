@@ -38,8 +38,7 @@ namespace ProStock.Repository.Repositorys
 
         // Produtos --------------------------
         public async Task<Produto[]> GetAllProdutosAsync(bool includeVendas){
-            IQueryable<Produto> query = _context.Produtos
-            .Include(p => p.Usuario);
+            IQueryable<Produto> query = _context.Produtos;
 
             if(includeVendas){
                 query = query.Include(pv => pv.ProdutosVendas)
@@ -52,8 +51,7 @@ namespace ProStock.Repository.Repositorys
         }
 
         public async Task<Produto[]> GetAllProdutosAsyncByName (string nome, bool includeVendas = false){
-            IQueryable<Produto> query = _context.Produtos
-            .Include(p => p.Usuario);
+            IQueryable<Produto> query = _context.Produtos;
 
             if(includeVendas){
                 query = query.Include(pv => pv.ProdutosVendas)
@@ -67,8 +65,7 @@ namespace ProStock.Repository.Repositorys
         }
 
         public async Task<Produto> GetProdutosAsyncById (int produtoId, bool includeVendas = false){
-            IQueryable<Produto> query = _context.Produtos
-            .Include(p => p.Usuario);
+            IQueryable<Produto> query = _context.Produtos;
 
             if(includeVendas){
                 query = query.Include(pv => pv.ProdutosVendas)

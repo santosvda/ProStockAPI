@@ -6,6 +6,7 @@ namespace ProStock.Domain
         public Produto Produto { get; set; }
         public int VendaId { get; set; }
         public Venda Venda { get; set; }
+        public int Quantidade { get; set; }
 
         /*
                 Venda ==== Produto

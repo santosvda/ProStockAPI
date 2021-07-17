@@ -28,22 +28,6 @@ namespace ProStock.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TipoUsuario",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Ativo = table.Column<bool>(nullable: false, defaultValue: true),
-                    DataInclusao = table.Column<DateTime>(nullable: false),
-                    DataExclusao = table.Column<DateTime>(nullable: true),
-                    Descricao = table.Column<string>(maxLength: 200, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TipoUsuario", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Cliente",
                 columns: table => new
                 {
@@ -132,7 +116,6 @@ namespace ProStock.API.Migrations
                     Login = table.Column<string>(maxLength: 20, nullable: true),
                     Senha = table.Column<string>(maxLength: 20, nullable: true),
                     PessoaId = table.Column<int>(nullable: true),
-                    TipoUsuarioId = table.Column<int>(nullable: true),
                     LojaId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -150,12 +133,6 @@ namespace ProStock.API.Migrations
                         principalTable: "Pessoa",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Usuario_TipoUsuario_TipoUsuarioId",
-                        column: x => x.TipoUsuarioId,
-                        principalTable: "TipoUsuario",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -170,7 +147,7 @@ namespace ProStock.API.Migrations
                     Nome = table.Column<string>(maxLength: 70, nullable: true),
                     Descricao = table.Column<string>(maxLength: 200, nullable: true),
                     Marca = table.Column<string>(maxLength: 50, nullable: true),
-                    ValorUnit = table.Column<decimal>(nullable: false, defaultValue: 0m),
+                    ValorUnit = table.Column<decimal>(type: "decimal(10, 2)", nullable: false, defaultValue: 0m),
                     UsuarioId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -193,7 +170,10 @@ namespace ProStock.API.Migrations
                     Ativo = table.Column<bool>(nullable: false, defaultValue: true),
                     DataInclusao = table.Column<DateTime>(nullable: false),
                     DataExclusao = table.Column<DateTime>(nullable: true),
-                    ValorTotal = table.Column<decimal>(nullable: false),
+                    ValorTotal = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
+                    Desconto = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
+                    Acrescimo = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
+                    Frete = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
                     Data = table.Column<DateTime>(nullable: false),
                     Status = table.Column<string>(maxLength: 50, nullable: true),
                     Descricao = table.Column<string>(maxLength: 50, nullable: true),
@@ -248,7 +228,8 @@ namespace ProStock.API.Migrations
                 columns: table => new
                 {
                     ProdutoId = table.Column<int>(nullable: false),
-                    VendaId = table.Column<int>(nullable: false)
+                    VendaId = table.Column<int>(nullable: false),
+                    Quantidade = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -328,11 +309,6 @@ namespace ProStock.API.Migrations
                 column: "VendaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TipoUsuario_Ativo",
-                table: "TipoUsuario",
-                column: "Ativo");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Usuario_Ativo",
                 table: "Usuario",
                 column: "Ativo");
@@ -346,11 +322,6 @@ namespace ProStock.API.Migrations
                 name: "IX_Usuario_PessoaId",
                 table: "Usuario",
                 column: "PessoaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Usuario_TipoUsuarioId",
-                table: "Usuario",
-                column: "TipoUsuarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Venda_Ativo",
@@ -390,9 +361,6 @@ namespace ProStock.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Loja");
-
-            migrationBuilder.DropTable(
-                name: "TipoUsuario");
 
             migrationBuilder.DropTable(
                 name: "Endereco");

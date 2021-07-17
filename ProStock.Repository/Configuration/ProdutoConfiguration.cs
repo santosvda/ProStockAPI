@@ -14,7 +14,6 @@ namespace ProStock.Repository.Configuration
             builder.Property(p => p.Descricao).HasMaxLength(200);
             builder.Property(p => p.ValorUnit).HasDefaultValue(0);
 
-
             builder.Property(p => p.Ativo).HasDefaultValue(true);
             builder.HasIndex(p => p.Ativo).IsUnique(false);
         }

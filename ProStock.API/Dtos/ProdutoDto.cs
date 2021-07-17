@@ -8,9 +8,9 @@ namespace ProStock.API.Dtos
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public string Marca { get; set; }
-        public decimal ValorUnit { get; set; }
+        public double ValorUnit { get; set; }
         public int? UsuarioId { get; set; }
-        public UsuarioDto Usuario { get; }
-        public List<VendaDto> Vendas { get; set; }
+        //public UsuarioDto Usuario { get; }
+        public List<VendaDto> Vendas { get; }
     }
 }
