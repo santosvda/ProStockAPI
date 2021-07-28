@@ -45,7 +45,7 @@ namespace ProStock.Repository.Repositorys
                 .ThenInclude (p => p.Venda);
             }
 
-            query = query.AsNoTracking().OrderBy(p => p.Id);
+            query = query.AsNoTracking().Where(p => p.Ativo).OrderBy(p => p.Id);
 
             return await query.ToArrayAsync();
         }
