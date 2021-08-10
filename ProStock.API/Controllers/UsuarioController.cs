@@ -37,7 +37,7 @@ namespace ProStock.API.Controllers
             {
                 var usuarios = await _usuarioRepository.GetAllUsuarioAsync();
 
-                var results = _mapper.Map<UsuarioDto[]>(usuarios);
+                var results = _mapper.Map<UsuarioGetDto[]>(usuarios);
 
                 return Ok(results);
             }
@@ -54,7 +54,7 @@ namespace ProStock.API.Controllers
             {
                 var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
 
-                var results = _mapper.Map<UsuarioDto>(usuario);
+                var results = _mapper.Map<UsuarioGetDto>(usuario);
 
                 return Ok(results);
             }
@@ -71,7 +71,7 @@ namespace ProStock.API.Controllers
             {
                 var usuario = await _usuarioRepository.GetAllUsuarioAsyncByLogin(Login);
 
-                var results = _mapper.Map<UsuarioDto[]>(usuario);
+                var results = _mapper.Map<UsuarioGetDto[]>(usuario);
 
                 return Ok(results);
             }
@@ -169,10 +169,12 @@ namespace ProStock.API.Controllers
                 var usuarioLogin = await _usuarioRepository.Login(usuario);
                 if (usuarioLogin == null) return Unauthorized();
 
+                var results = _mapper.Map<UsuarioGetDto>(usuarioLogin);
+
                 return Ok(new
                 {
                     token = GenerateJWToken(usuarioLogin).Result,
-                    user = usuarioLogin
+                    user = results
                 });
             }
             catch (System.Exception ex)
