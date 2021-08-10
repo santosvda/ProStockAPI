@@ -40,7 +40,7 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Cliente> query = _context.Clientes
             .Include(c => c.Pessoa).ThenInclude(ce => ce.Enderecos);
 
-            query = query.AsNoTracking().OrderBy(e => e.Id);
+            query = query.AsNoTracking().Where(e => e.Ativo).OrderBy(e => e.Id);
 
             return await query.ToArrayAsync();
         }
