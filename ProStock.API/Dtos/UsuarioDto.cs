@@ -10,7 +10,7 @@ namespace ProStock.API.Dtos
         public string Login { get; set; }
         public string Senha { get; set;}
         public int? PessoaId { get; set; }
-        public PessoaDto Pessoa { get; }
+        public PessoaDto Pessoa { get; set; }
         public int? LojaId { get; set; }
         public List<VendaDto> Vendas { get; }
     }
