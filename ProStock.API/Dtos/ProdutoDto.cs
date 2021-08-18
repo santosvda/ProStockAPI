@@ -11,6 +11,6 @@ namespace ProStock.API.Dtos
         public double ValorUnit { get; set; }
         public int? UsuarioId { get; set; }
         //public UsuarioDto Usuario { get; }
-        public List<VendaDto> Vendas { get; }
+        public List<VendaDto> Vendas { get; set;}
     }
 }

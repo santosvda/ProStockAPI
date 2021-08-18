@@ -9,7 +9,7 @@ namespace ProStock.API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Pessoa",
+                name: "Pessoas",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -24,11 +24,11 @@ namespace ProStock.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pessoa", x => x.Id);
+                    table.PrimaryKey("PK_Pessoas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cliente",
+                name: "Clientes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -40,17 +40,17 @@ namespace ProStock.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cliente", x => x.Id);
+                    table.PrimaryKey("PK_Clientes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cliente_Pessoa_PessoaId",
+                        name: "FK_Clientes_Pessoas_PessoaId",
                         column: x => x.PessoaId,
-                        principalTable: "Pessoa",
+                        principalTable: "Pessoas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Endereco",
+                name: "Enderecos",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -70,11 +70,11 @@ namespace ProStock.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Endereco", x => x.Id);
+                    table.PrimaryKey("PK_Enderecos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Endereco_Pessoa_PessoaId",
+                        name: "FK_Enderecos_Pessoas_PessoaId",
                         column: x => x.PessoaId,
-                        principalTable: "Pessoa",
+                        principalTable: "Pessoas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -97,15 +97,15 @@ namespace ProStock.API.Migrations
                 {
                     table.PrimaryKey("PK_Loja", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Loja_Endereco_EnderecoId",
+                        name: "FK_Loja_Enderecos_EnderecoId",
                         column: x => x.EnderecoId,
-                        principalTable: "Endereco",
+                        principalTable: "Enderecos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Usuario",
+                name: "Usuarios",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -120,23 +120,23 @@ namespace ProStock.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuario", x => x.Id);
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Usuario_Loja_LojaId",
+                        name: "FK_Usuarios_Loja_LojaId",
                         column: x => x.LojaId,
                         principalTable: "Loja",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Usuario_Pessoa_PessoaId",
+                        name: "FK_Usuarios_Pessoas_PessoaId",
                         column: x => x.PessoaId,
-                        principalTable: "Pessoa",
+                        principalTable: "Pessoas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Produto",
+                name: "Produtos",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -152,17 +152,17 @@ namespace ProStock.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Produto", x => x.Id);
+                    table.PrimaryKey("PK_Produtos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Produto_Usuario_UsuarioId",
+                        name: "FK_Produtos_Usuarios_UsuarioId",
                         column: x => x.UsuarioId,
-                        principalTable: "Usuario",
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Venda",
+                name: "Vendas",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -182,23 +182,23 @@ namespace ProStock.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Venda", x => x.Id);
+                    table.PrimaryKey("PK_Vendas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Venda_Cliente_ClienteId",
+                        name: "FK_Vendas_Clientes_ClienteId",
                         column: x => x.ClienteId,
-                        principalTable: "Cliente",
+                        principalTable: "Clientes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Venda_Usuario_UsuarioId",
+                        name: "FK_Vendas_Usuarios_UsuarioId",
                         column: x => x.UsuarioId,
-                        principalTable: "Usuario",
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Estoque",
+                name: "Estoques",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -214,11 +214,11 @@ namespace ProStock.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Estoque", x => x.Id);
+                    table.PrimaryKey("PK_Estoques", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Estoque_Produto_ProdutoId",
+                        name: "FK_Estoques_Produtos_ProdutoId",
                         column: x => x.ProdutoId,
-                        principalTable: "Produto",
+                        principalTable: "Produtos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -227,55 +227,57 @@ namespace ProStock.API.Migrations
                 name: "ProdutosVendas",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ProdutoId = table.Column<int>(nullable: false),
                     VendaId = table.Column<int>(nullable: false),
                     Quantidade = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProdutosVendas", x => new { x.ProdutoId, x.VendaId });
+                    table.PrimaryKey("PK_ProdutosVendas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProdutosVendas_Produto_ProdutoId",
+                        name: "FK_ProdutosVendas_Produtos_ProdutoId",
                         column: x => x.ProdutoId,
-                        principalTable: "Produto",
+                        principalTable: "Produtos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProdutosVendas_Venda_VendaId",
+                        name: "FK_ProdutosVendas_Vendas_VendaId",
                         column: x => x.VendaId,
-                        principalTable: "Venda",
+                        principalTable: "Vendas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cliente_Ativo",
-                table: "Cliente",
+                name: "IX_Clientes_Ativo",
+                table: "Clientes",
                 column: "Ativo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cliente_PessoaId",
-                table: "Cliente",
+                name: "IX_Clientes_PessoaId",
+                table: "Clientes",
                 column: "PessoaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Endereco_Ativo",
-                table: "Endereco",
+                name: "IX_Enderecos_Ativo",
+                table: "Enderecos",
                 column: "Ativo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Endereco_PessoaId",
-                table: "Endereco",
+                name: "IX_Enderecos_PessoaId",
+                table: "Enderecos",
                 column: "PessoaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Estoque_Ativo",
-                table: "Estoque",
+                name: "IX_Estoques_Ativo",
+                table: "Estoques",
                 column: "Ativo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Estoque_ProdutoId",
-                table: "Estoque",
+                name: "IX_Estoques_ProdutoId",
+                table: "Estoques",
                 column: "ProdutoId");
 
             migrationBuilder.CreateIndex(
@@ -289,19 +291,24 @@ namespace ProStock.API.Migrations
                 column: "EnderecoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pessoa_Ativo",
-                table: "Pessoa",
+                name: "IX_Pessoas_Ativo",
+                table: "Pessoas",
                 column: "Ativo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Produto_Ativo",
-                table: "Produto",
+                name: "IX_Produtos_Ativo",
+                table: "Produtos",
                 column: "Ativo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Produto_UsuarioId",
-                table: "Produto",
+                name: "IX_Produtos_UsuarioId",
+                table: "Produtos",
                 column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProdutosVendas_ProdutoId",
+                table: "ProdutosVendas",
+                column: "ProdutoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProdutosVendas_VendaId",
@@ -309,64 +316,64 @@ namespace ProStock.API.Migrations
                 column: "VendaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuario_Ativo",
-                table: "Usuario",
+                name: "IX_Usuarios_Ativo",
+                table: "Usuarios",
                 column: "Ativo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuario_LojaId",
-                table: "Usuario",
+                name: "IX_Usuarios_LojaId",
+                table: "Usuarios",
                 column: "LojaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuario_PessoaId",
-                table: "Usuario",
+                name: "IX_Usuarios_PessoaId",
+                table: "Usuarios",
                 column: "PessoaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Venda_Ativo",
-                table: "Venda",
+                name: "IX_Vendas_Ativo",
+                table: "Vendas",
                 column: "Ativo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Venda_ClienteId",
-                table: "Venda",
+                name: "IX_Vendas_ClienteId",
+                table: "Vendas",
                 column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Venda_UsuarioId",
-                table: "Venda",
+                name: "IX_Vendas_UsuarioId",
+                table: "Vendas",
                 column: "UsuarioId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Estoque");
+                name: "Estoques");
 
             migrationBuilder.DropTable(
                 name: "ProdutosVendas");
 
             migrationBuilder.DropTable(
-                name: "Produto");
+                name: "Produtos");
 
             migrationBuilder.DropTable(
-                name: "Venda");
+                name: "Vendas");
 
             migrationBuilder.DropTable(
-                name: "Cliente");
+                name: "Clientes");
 
             migrationBuilder.DropTable(
-                name: "Usuario");
+                name: "Usuarios");
 
             migrationBuilder.DropTable(
                 name: "Loja");
 
             migrationBuilder.DropTable(
-                name: "Endereco");
+                name: "Enderecos");
 
             migrationBuilder.DropTable(
-                name: "Pessoa");
+                name: "Pessoas");
         }
     }
 }

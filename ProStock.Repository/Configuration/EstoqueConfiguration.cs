@@ -7,7 +7,7 @@ namespace ProStock.Repository.Configuration
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Estoque> builder)
         {
-            builder.ToTable("Estoque");
+            builder.ToTable("Estoques");
             builder.HasKey(p => p.Id);
             builder.Property(p => p.QtdAtual).HasDefaultValue(0);
             builder.Property(p => p.QtdMinima).HasDefaultValue(0);

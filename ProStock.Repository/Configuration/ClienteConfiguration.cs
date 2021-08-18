@@ -7,7 +7,7 @@ namespace ProStock.Repository.Configuration
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Cliente> builder)
         {
-            builder.ToTable("Cliente");
+            builder.ToTable("Clientes");
             builder.HasKey(p => p.Id);
 
             builder.Property(p => p.Ativo).HasDefaultValue(true);

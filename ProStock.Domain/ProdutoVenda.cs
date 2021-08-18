@@ -2,6 +2,7 @@ namespace ProStock.Domain
 {
     public class ProdutoVenda
     {
+        public int Id { get; set; }
         public int ProdutoId { get; set; }
         public Produto Produto { get; set; }
         public int VendaId { get; set; }

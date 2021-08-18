@@ -7,7 +7,7 @@ namespace ProStock.Repository.Configuration
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Venda> builder)
         {
-            builder.ToTable("Venda");
+            builder.ToTable("Vendas");
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Status).HasMaxLength(50);
             builder.Property(p => p.Descricao).HasMaxLength(50);

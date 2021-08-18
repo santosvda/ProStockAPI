@@ -7,7 +7,7 @@ namespace ProStock.Repository.Configuration
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Endereco> builder)
         {
-            builder.ToTable("Endereco");
+            builder.ToTable("Enderecos");
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Bairro).HasMaxLength(50);
             builder.Property(p => p.Cep).HasMaxLength(9);

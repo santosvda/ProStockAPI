@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -15,11 +16,13 @@ namespace ProStock.API.Controllers
     public class VendaController : ControllerBase //herda para trabalhar com http e etc
     {
         private readonly IVendaRepository _vendaRepository;
+        private readonly IProdutoRepository _produtoRepository;
         private readonly IMapper _mapper;
-        public VendaController(IVendaRepository vendaRepository, IMapper mapper)
+        public VendaController(IVendaRepository vendaRepository,IProdutoRepository produtoRepository, IMapper mapper)
         {
             _mapper = mapper;
             _vendaRepository = vendaRepository;
+            _produtoRepository = produtoRepository;
         }
 
         [HttpGet]// api/venda
@@ -94,12 +97,26 @@ namespace ProStock.API.Controllers
                 var venda = _mapper.Map<Venda>(model);
 
                 venda.DataInclusao = DateTime.Now;
-                
-                _vendaRepository.Add(venda);
+
+                venda.ProdutosVendas = new List<ProdutoVenda>();
+                foreach (ProdutoVendaDto data in model.Produtos)
+                {
+                    var produto = await _produtoRepository.GetProdutosAsyncById(data.ProdutoId, false);
+                    if (produto == null) return NotFound();
+
+                    ProdutoVenda pv = new ProdutoVenda();
+                    pv.Produto = produto;
+                    pv.Venda = new Venda();
+                    pv.ProdutoId = produto.Id;
+                    pv.Quantidade = data.Quantidade;
+                    venda.ProdutosVendas.Add(pv);
+                }
+
+                _vendaRepository.Update(venda);
 
                 if (await _vendaRepository.SaveChangesAsync())
                 {
-                    return Created($"/api/venda/{model.Id}", model);
+                    return Created($"/api/venda/{venda.Id}", model);
                 }
             }
             catch (System.Exception ex)

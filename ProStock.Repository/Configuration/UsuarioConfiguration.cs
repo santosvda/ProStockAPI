@@ -7,7 +7,7 @@ namespace ProStock.Repository.Configuration
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Usuario> builder)
         {
-            builder.ToTable("Usuario");
+            builder.ToTable("Usuarios");
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Senha).HasMaxLength(20);
             builder.Property(p => p.Login).HasMaxLength(20);

@@ -32,13 +32,13 @@ namespace ProStock.API.Controllers
 
                 return Ok(results);
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou " + ex.Message);
             }
         }
         [HttpGet("{ProdutoId}")]// api/produto/{id}
-        public async Task<IActionResult> Get(int produtoId, bool includeVendas = true)
+        public async Task<IActionResult> Get(int produtoId, bool includeVendas = false)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace ProStock.API.Controllers
             }
         }
         [HttpGet("getByNome/{nome}")]// api/produto/getByNome/{nome}
-        public async Task<IActionResult> Get(string nome, bool includeVendas = true)
+        public async Task<IActionResult> Get(string nome, bool includeVendas = false)
         {
             try
             {

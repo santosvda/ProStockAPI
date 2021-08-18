@@ -30,12 +30,7 @@ namespace ProStock.Repository
             modelBuilder.ApplyConfiguration(new ProdutoConfiguration());
             modelBuilder.ApplyConfiguration(new UsuarioConfiguration());
             modelBuilder.ApplyConfiguration(new VendaConfiguration());
-            /*
-                sobrescrevendo o metodo
-                especificando a relação (n,n) Produto - Venda 
-            */
-            modelBuilder.Entity<ProdutoVenda>()
-            .HasKey(PV => new { PV.ProdutoId, PV.VendaId });
+            modelBuilder.ApplyConfiguration(new ProdutoVendaConfiguration());
             foreach (var property in modelBuilder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetProperties())
                 .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))

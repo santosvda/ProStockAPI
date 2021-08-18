@@ -38,7 +38,7 @@ namespace ProStock.API.Migrations
 
                     b.HasIndex("PessoaId");
 
-                    b.ToTable("Cliente");
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Endereco", b =>
@@ -87,7 +87,7 @@ namespace ProStock.API.Migrations
 
                     b.HasIndex("PessoaId");
 
-                    b.ToTable("Endereco");
+                    b.ToTable("Enderecos");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Estoque", b =>
@@ -125,7 +125,7 @@ namespace ProStock.API.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("Estoque");
+                    b.ToTable("Estoques");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Loja", b =>
@@ -190,7 +190,7 @@ namespace ProStock.API.Migrations
 
                     b.HasIndex("Ativo");
 
-                    b.ToTable("Pessoa");
+                    b.ToTable("Pessoas");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Produto", b =>
@@ -228,18 +228,23 @@ namespace ProStock.API.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Produto");
+                    b.ToTable("Produtos");
                 });
 
             modelBuilder.Entity("ProStock.Domain.ProdutoVenda", b =>
                 {
-                    b.Property<int>("ProdutoId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("VendaId");
+                    b.Property<int>("ProdutoId");
 
                     b.Property<int>("Quantidade");
 
-                    b.HasKey("ProdutoId", "VendaId");
+                    b.Property<int>("VendaId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProdutoId");
 
                     b.HasIndex("VendaId");
 
@@ -277,7 +282,7 @@ namespace ProStock.API.Migrations
 
                     b.HasIndex("PessoaId");
 
-                    b.ToTable("Usuario");
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Venda", b =>
@@ -325,7 +330,7 @@ namespace ProStock.API.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Venda");
+                    b.ToTable("Vendas");
                 });
 
             modelBuilder.Entity("ProStock.Domain.Cliente", b =>
