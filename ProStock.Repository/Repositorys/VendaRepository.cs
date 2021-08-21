@@ -36,7 +36,8 @@ namespace ProStock.Repository.Repositorys
             return (await _context.SaveChangesAsync()) > 0;
         }
         public async Task<Venda[]> GetAllVendasAsync(){
-            IQueryable<Venda> query = _context.Vendas;
+            IQueryable<Venda> query = _context.Vendas
+            .Include(v => v.Cliente).ThenInclude(v => v.Pessoa).Include(v => v.Usuario).ThenInclude(v => v.Pessoa);
 
             query = query.AsNoTracking().OrderBy(p => p.Id);
 

@@ -4,7 +4,7 @@ namespace ProStock.API.Dtos
     {
         public int Id { get; set; }
         public int VendaId { get; set; }
-        public VendaDto Venda { get; }
+        public VendaDto Venda { get; set; }
         public int ProdutoId { get; set; }
         public ProdutoDto Produto { get;  }
         public int Quantidade { get; set; }
