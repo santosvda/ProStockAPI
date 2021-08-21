@@ -116,6 +116,7 @@ namespace ProStock.API.Controllers
                 usuarioNew.DataInclusao = usuario.DataInclusao;
                 usuarioNew.DataExclusao = usuario.DataExclusao;
                 usuarioNew.Ativo = usuario.Ativo;
+                usuarioNew.Senha = usuario.Senha;
 
                 _usuarioRepository.Update(usuarioNew);
 
@@ -123,6 +124,36 @@ namespace ProStock.API.Controllers
                 {
                     return Created($"/api/usuario/{model.Id}", model);
                 }
+            }
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou " + ex.Message);
+            }
+
+            return BadRequest();
+        }
+        [HttpPut("changeSenha/{UsuarioId}")]
+        public async Task<IActionResult> PutSenha(int UsuarioId, UsuarioSenhaDto model)
+        {
+            try
+            {
+                if(model.UsuarioId == 0){
+
+                var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
+                usuario.Senha = model.ConfirmarSenha;
+                usuario = await _usuarioRepository.Login(usuario);
+                if (usuario == null) return NotFound();
+
+                var usuarioNew = usuario;
+                usuarioNew.Senha = model.Senha;
+
+                _usuarioRepository.Update(usuarioNew);
+
+                if (await _usuarioRepository.SaveChangesAsync())
+                {
+                    return Created($"/api/usuario/{model.Id}", model);
+                }
+            }
             }
             catch (System.Exception ex)
             {

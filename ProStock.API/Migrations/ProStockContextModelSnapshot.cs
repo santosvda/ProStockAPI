@@ -274,6 +274,10 @@ namespace ProStock.API.Migrations
                     b.Property<string>("Senha")
                         .HasMaxLength(20);
 
+                    b.Property<int>("TipoUsuario")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(2);
+
                     b.HasKey("Id");
 
                     b.HasIndex("Ativo");

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ProStock.Domain.Enums;
 
 namespace ProStock.Domain
 {
@@ -8,6 +9,7 @@ namespace ProStock.Domain
         public int Id { get; set; }
         public string Login { get; set; }
         public string Senha { get; set; }
+        public TipoUsuario TipoUsuario { get; set; }
         public int? PessoaId { get; set; }
         public Pessoa Pessoa { get; set; }
         //public TipoUsuario TipoUsuario { get; set; }
