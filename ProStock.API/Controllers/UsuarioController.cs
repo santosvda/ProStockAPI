@@ -137,11 +137,33 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                if(model.UsuarioId == 0){
+
+                if(model.UsuarioId == 0)
+                {
+
+                    var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
+                    usuario.Senha = model.ConfirmarSenha;
+                    usuario = await _usuarioRepository.Login(usuario);
+                    if (usuario == null) return NotFound();
+
+                    var usuarioNew = usuario;
+                    usuarioNew.Senha = model.Senha;
+
+                    _usuarioRepository.Update(usuarioNew);
+
+                    if (await _usuarioRepository.SaveChangesAsync())
+                    {
+                        return Created($"/api/usuario/{model.Id}", model);
+                    }
+                }
+            else
+            {
+
+                var admin = await _usuarioRepository.GetUsuarioAsyncById(model.UsuarioId);
+                if (admin.TipoUsuario != Domain.Enums.TipoUsuario.Admin)
+                    return Unauthorized();
 
                 var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
-                usuario.Senha = model.ConfirmarSenha;
-                usuario = await _usuarioRepository.Login(usuario);
                 if (usuario == null) return NotFound();
 
                 var usuarioNew = usuario;
