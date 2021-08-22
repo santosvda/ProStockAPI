@@ -39,7 +39,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Usuario> query = _context.Usuarios
             .Include(p => p.Pessoa);
 
-            query = query.AsNoTracking().Where(u => u.Ativo).OrderBy(u => u.Id);
+            query = query.AsNoTracking().Where(u => u.Ativo).OrderBy(u => u.Id)
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -49,7 +50,8 @@ namespace ProStock.Repository.Repositorys
             .Include(p => p.Pessoa);
 
             query = query.AsNoTracking().OrderByDescending(u => u.Id)
-            .Where(u => u.Id == usuarioId);
+            .Where(u => u.Id == usuarioId)
+            .Where(e => e.Ativo);
 
             return await query.FirstOrDefaultAsync();
         }
@@ -58,7 +60,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Usuario> query = _context.Usuarios
             .Include(p => p.Pessoa);
             query = query.AsNoTracking().OrderBy(u => u.Id)
-            .Where(u => u.Login == usuarioLogin);
+            .Where(u => u.Login == usuarioLogin)
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -68,7 +71,8 @@ namespace ProStock.Repository.Repositorys
             .Include(p => p.Pessoa);
 
             query = query.AsNoTracking().OrderBy(u => u.Id)
-            .Where(u => u.Login == usuario.Login && u.Senha == usuario.Senha);
+            .Where(u => u.Login == usuario.Login && u.Senha == usuario.Senha)
+            .Where(e => e.Ativo);
 
             return await query.FirstOrDefaultAsync();
         }

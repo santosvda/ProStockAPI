@@ -39,7 +39,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Pessoa> query = _context.Pessoas
             .Include(p => p.Enderecos);
 
-            query = query.AsNoTracking().OrderBy(p => p.Nome);
+            query = query.AsNoTracking().OrderBy(p => p.Nome)
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -49,7 +50,8 @@ namespace ProStock.Repository.Repositorys
             .Include(p => p.Enderecos);
 
             query = query.AsNoTracking().OrderByDescending(p => p.Nome)
-            .Where(p => p.Nome.ToLower().Contains(nome.ToLower()));
+            .Where(p => p.Nome.ToLower().Contains(nome.ToLower()))
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -59,7 +61,8 @@ namespace ProStock.Repository.Repositorys
             .Include(p => p.Enderecos);
 
             query = query.AsNoTracking().OrderByDescending(p => p.Nome)
-            .Where(p => p.Id == pessoaId);
+            .Where(p => p.Id == pessoaId)
+            .Where(e => e.Ativo);
 
             return await query.FirstOrDefaultAsync();
         }
@@ -69,7 +72,8 @@ namespace ProStock.Repository.Repositorys
             .Include(p => p.Enderecos);
 
             query = query.AsNoTracking().OrderByDescending(p => p.Nome)
-            .Where(p => p.Cpf == cpf);
+            .Where(p => p.Cpf == cpf)
+            .Where(e => e.Ativo);
 
             return await query.FirstOrDefaultAsync();
         }

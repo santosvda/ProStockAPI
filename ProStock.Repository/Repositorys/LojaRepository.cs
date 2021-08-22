@@ -40,7 +40,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Loja> query = _context.Lojas
             .Include(l => l.Endereco);
 
-            query = query.AsNoTracking().OrderBy(e => e.Id);
+            query = query.AsNoTracking().OrderBy(e => e.Id)
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -50,7 +51,8 @@ namespace ProStock.Repository.Repositorys
             .Include(l => l.Endereco);
 
             query = query.AsNoTracking().OrderByDescending(l => l.Descricao)
-            .Where(l => l.Id == lojaId);
+            .Where(l => l.Id == lojaId)
+            .Where(e => e.Ativo);
 
             return await query.FirstOrDefaultAsync();
         }
@@ -60,7 +62,8 @@ namespace ProStock.Repository.Repositorys
             .Include(l => l.Endereco);
 
             query = query.AsNoTracking().OrderByDescending(c => c.Id)
-            .Where(l => l.Descricao.ToLower().Contains(descricao.ToLower()));
+            .Where(l => l.Descricao.ToLower().Contains(descricao.ToLower()))
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }

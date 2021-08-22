@@ -45,7 +45,8 @@ namespace ProStock.Repository.Repositorys
                 .ThenInclude (p => p.Venda);
             }
 
-            query = query.AsNoTracking().Where(p => p.Ativo).OrderBy(p => p.Id);
+            query = query.AsNoTracking().Where(p => p.Ativo).OrderBy(p => p.Id)
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -59,7 +60,8 @@ namespace ProStock.Repository.Repositorys
             }
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataExclusao)
-            .Where(p => p.Nome.ToLower().Contains(nome.ToLower()));
+            .Where(p => p.Nome.ToLower().Contains(nome.ToLower()))
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -73,7 +75,8 @@ namespace ProStock.Repository.Repositorys
             }
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
-            .Where(p => p.Id == produtoId);
+            .Where(p => p.Id == produtoId)
+            .Where(e => e.Ativo);
 
             return await query.FirstOrDefaultAsync();
         }

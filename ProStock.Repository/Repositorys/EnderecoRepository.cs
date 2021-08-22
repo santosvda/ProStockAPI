@@ -39,7 +39,8 @@ namespace ProStock.Repository.Repositorys
         public async Task<Endereco[]> GetAllEnderecoAsync(){
             IQueryable<Endereco> query = _context.Enderecos;
 
-            query = query.AsNoTracking().OrderBy(e => e.Id);
+            query = query.AsNoTracking().OrderBy(e => e.Id)
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -48,7 +49,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Endereco> query = _context.Enderecos;
 
             query = query.AsNoTracking().OrderByDescending(e => e.Id)
-            .Where(e => e.Cep.ToLower().Contains(cep.ToLower()));
+            .Where(e => e.Cep.ToLower().Contains(cep.ToLower()))
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -57,7 +59,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Endereco> query = _context.Enderecos;
 
             query = query.AsNoTracking().OrderByDescending(e => e.Cidade)
-            .Where(e => e.Cidade.ToLower().Contains(cidade.ToLower()));
+            .Where(e => e.Cidade.ToLower().Contains(cidade.ToLower()))
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -66,7 +69,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Endereco> query = _context.Enderecos;
 
             query = query.AsNoTracking().OrderByDescending(e => e.Rua)
-            .Where(e => e.Rua.ToLower().Contains(rua.ToLower()));
+            .Where(e => e.Rua.ToLower().Contains(rua.ToLower()))
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -75,7 +79,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Endereco> query = _context.Enderecos;
 
             query = query.AsNoTracking().OrderByDescending(e => e.DataInclusao)
-            .Where(e => e.Id == enderecoId);
+            .Where(e => e.Id == enderecoId)
+            .Where(e => e.Ativo);
 
             return await query.FirstOrDefaultAsync();
         }

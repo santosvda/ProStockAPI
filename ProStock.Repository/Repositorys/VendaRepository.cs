@@ -39,7 +39,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Venda> query = _context.Vendas
             .Include(v => v.Cliente).ThenInclude(v => v.Pessoa).Include(v => v.Usuario).ThenInclude(v => v.Pessoa);
 
-            query = query.AsNoTracking().OrderBy(p => p.Id);
+            query = query.AsNoTracking().OrderBy(p => p.Id)
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -47,7 +48,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Venda> query = _context.Vendas;
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataExclusao)
-            .Where(p => p.UsuarioId == userId);
+            .Where(p => p.UsuarioId == userId)
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -56,7 +58,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Venda> query = _context.Vendas;
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataExclusao)
-            .Where(p => p.ClienteId == clientId);
+            .Where(p => p.ClienteId == clientId)
+            .Where(e => e.Ativo);
 
             return await query.ToArrayAsync();
         }
@@ -65,7 +68,8 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Venda> query = _context.Vendas;
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
-            .Where(p => p.Id == VendaId);
+            .Where(p => p.Id == VendaId)
+            .Where(e => e.Ativo);
 
             return await query.FirstOrDefaultAsync();
         }
