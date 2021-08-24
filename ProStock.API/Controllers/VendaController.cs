@@ -101,7 +101,7 @@ namespace ProStock.API.Controllers
                 venda.ProdutosVendas = new List<ProdutoVenda>();
                 foreach (ProdutoVendaDto data in model.Produtos)
                 {
-                    var produto = await _produtoRepository.GetProdutosAsyncById(data.ProdutoId, false);
+                    var produto = await _produtoRepository.GetProdutosAsyncById(data.ProdutoId);
                     if (produto == null) return NotFound();
 
                     ProdutoVenda pv = new ProdutoVenda();

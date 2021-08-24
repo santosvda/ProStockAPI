@@ -27,7 +27,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var produtos = await _produtoRepository.GetAllProdutosAsync(true);
+                var produtos = await _produtoRepository.GetAllProdutosAsync();
                 var results = _mapper.Map<ProdutoDto[]>(produtos);
 
                 return Ok(results);
@@ -38,11 +38,11 @@ namespace ProStock.API.Controllers
             }
         }
         [HttpGet("{ProdutoId}")]// api/produto/{id}
-        public async Task<IActionResult> Get(int produtoId, bool includeVendas = false)
+        public async Task<IActionResult> Get(int produtoId)
         {
             try
             {
-                var produtos = await _produtoRepository.GetProdutosAsyncById(produtoId, includeVendas);
+                var produtos = await _produtoRepository.GetProdutosAsyncById(produtoId);
                 var results = _mapper.Map<ProdutoDto>(produtos);
 
                 return Ok(results);
@@ -53,11 +53,11 @@ namespace ProStock.API.Controllers
             }
         }
         [HttpGet("getByNome/{nome}")]// api/produto/getByNome/{nome}
-        public async Task<IActionResult> Get(string nome, bool includeVendas = false)
+        public async Task<IActionResult> Get(string nome)
         {
             try
             {
-                var produtos = await _produtoRepository.GetAllProdutosAsyncByName(nome, includeVendas);
+                var produtos = await _produtoRepository.GetAllProdutosAsyncByName(nome);
 
                 var results = _mapper.Map<ProdutoDto[]>(produtos);
 
@@ -96,7 +96,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var produto = await _produtoRepository.GetProdutosAsyncById(ProdutoId, false);
+                var produto = await _produtoRepository.GetProdutosAsyncById(ProdutoId);
                 if (produto == null) return NotFound();
 
                 var produtoNew = _mapper.Map<Produto>(model);
@@ -126,7 +126,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var produto = await _produtoRepository.GetProdutosAsyncById(ProdutoId, false);
+                var produto = await _produtoRepository.GetProdutosAsyncById(ProdutoId);
                 if (produto == null) return NotFound();
 
                 produto.Ativo = false;
