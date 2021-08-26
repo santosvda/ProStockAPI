@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ProStock.API.Dtos;
+using ProStock.API.Helpers;
 using ProStock.Domain;
 using ProStock.Repository;
 using ProStock.Repository.Interfaces;
@@ -88,12 +89,14 @@ namespace ProStock.API.Controllers
             {
                 var usuario = _mapper.Map<Usuario>(model);
 
+                usuario.Senha = Encrypt.EncodePasswordToBase64(usuario.Senha);
+
                 usuario.DataInclusao = DateTime.Now;
                 _usuarioRepository.Add(usuario);
 
                 if (await _usuarioRepository.SaveChangesAsync())
                 {
-                    return Created($"/api/usuario/{model.Id}", model);
+                    return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(model));
                 }
             }
             catch (System.Exception ex)
@@ -122,7 +125,7 @@ namespace ProStock.API.Controllers
 
                 if (await _usuarioRepository.SaveChangesAsync())
                 {
-                    return Created($"/api/usuario/{model.Id}", model);
+                    return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(model));
                 }
             }
             catch (System.Exception ex)
@@ -143,17 +146,20 @@ namespace ProStock.API.Controllers
 
                     var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
                     usuario.Senha = model.ConfirmarSenha;
+                    usuario.Senha = Encrypt.EncodePasswordToBase64(usuario.Senha);
                     usuario = await _usuarioRepository.Login(usuario);
                     if (usuario == null) return NotFound();
 
                     var usuarioNew = usuario;
                     usuarioNew.Senha = model.Senha;
+                    
+                    usuarioNew.Senha = Encrypt.EncodePasswordToBase64(usuarioNew.Senha);
 
                     _usuarioRepository.Update(usuarioNew);
 
                     if (await _usuarioRepository.SaveChangesAsync())
                     {
-                        return Created($"/api/usuario/{model.Id}", model);
+                        return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(model));
                     }
                 }
             else
@@ -168,12 +174,14 @@ namespace ProStock.API.Controllers
 
                 var usuarioNew = usuario;
                 usuarioNew.Senha = model.Senha;
+                usuarioNew.Senha = Encrypt.EncodePasswordToBase64(usuarioNew.Senha);
+
 
                 _usuarioRepository.Update(usuarioNew);
 
                 if (await _usuarioRepository.SaveChangesAsync())
                 {
-                    return Created($"/api/usuario/{model.Id}", model);
+                    return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(model));
                 }
             }
             }
@@ -218,6 +226,8 @@ namespace ProStock.API.Controllers
             try
             {
                 var usuario = _mapper.Map<Usuario>(userLogin);
+                usuario.Senha = Encrypt.EncodePasswordToBase64(usuario.Senha);
+
 
                 var usuarioLogin = await _usuarioRepository.Login(usuario);
                 if (usuarioLogin == null) return Unauthorized();

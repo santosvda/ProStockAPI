@@ -37,13 +37,8 @@ namespace ProStock.Repository.Repositorys
         }
 
         // Produtos --------------------------
-        public async Task<Produto[]> GetAllProdutosAsync(bool includeVendas){
+        public async Task<Produto[]> GetAllProdutosAsync(){
             IQueryable<Produto> query = _context.Produtos;
-
-            if(includeVendas){
-                query = query.Include(pv => pv.ProdutosVendas)
-                .ThenInclude (p => p.Venda);
-            }
 
             query = query.AsNoTracking().Where(p => p.Ativo).OrderBy(p => p.Id)
             .Where(e => e.Ativo);
@@ -51,13 +46,8 @@ namespace ProStock.Repository.Repositorys
             return await query.ToArrayAsync();
         }
 
-        public async Task<Produto[]> GetAllProdutosAsyncByName (string nome, bool includeVendas = false){
+        public async Task<Produto[]> GetAllProdutosAsyncByName (string nome){
             IQueryable<Produto> query = _context.Produtos;
-
-            if(includeVendas){
-                query = query.Include(pv => pv.ProdutosVendas)
-                .ThenInclude (p => p.Venda);
-            }
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataExclusao)
             .Where(p => p.Nome.ToLower().Contains(nome.ToLower()))
@@ -66,13 +56,8 @@ namespace ProStock.Repository.Repositorys
             return await query.ToArrayAsync();
         }
 
-        public async Task<Produto> GetProdutosAsyncById (int produtoId, bool includeVendas = false){
+        public async Task<Produto> GetProdutosAsyncById (int produtoId){
             IQueryable<Produto> query = _context.Produtos;
-
-            if(includeVendas){
-                query = query.Include(pv => pv.ProdutosVendas)
-                .ThenInclude (p => p.Venda);
-            }
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
             .Where(p => p.Id == produtoId)
