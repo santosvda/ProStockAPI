@@ -27,7 +27,7 @@ namespace ProStock.API.Controllers
         {
             try
             {
-                var produtos = await _produtoRepository.GetAllProdutosAsync(true);
+                var produtos = await _produtoRepository.GetAllProdutosAsync(false);
                 var results = _mapper.Map<ProdutoDto[]>(produtos);
 
                 return Ok(results);
