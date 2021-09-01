@@ -96,7 +96,7 @@ namespace ProStock.API.Controllers
 
                 if (await _usuarioRepository.SaveChangesAsync())
                 {
-                    return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(model));
+                    return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(usuario));
                 }
             }
             catch (System.Exception ex)
@@ -125,7 +125,7 @@ namespace ProStock.API.Controllers
 
                 if (await _usuarioRepository.SaveChangesAsync())
                 {
-                    return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(model));
+                    return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(usuario));
                 }
             }
             catch (System.Exception ex)
@@ -159,7 +159,7 @@ namespace ProStock.API.Controllers
 
                     if (await _usuarioRepository.SaveChangesAsync())
                     {
-                        return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(model));
+                        return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(usuario));
                     }
                 }
             else
@@ -181,7 +181,7 @@ namespace ProStock.API.Controllers
 
                 if (await _usuarioRepository.SaveChangesAsync())
                 {
-                    return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(model));
+                    return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(usuario));
                 }
             }
             }

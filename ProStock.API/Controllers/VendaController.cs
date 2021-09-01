@@ -46,13 +46,25 @@ namespace ProStock.API.Controllers
             try
             {
                 var vendas = await _vendaRepository.GetVendasAsyncById(vendaId);
-                var results = _mapper.Map<VendaDto>(vendas);
+                var results = _mapper.Map<VendaGetDto>(vendas);
+
+                results.Produtos = new List<ProdutoDto>();
+                var produtos = _mapper.Map<ProdutoVendaDto[]>(vendas.ProdutosVendas);
+                foreach (ProdutoVendaDto data in produtos)
+                {
+                    var produto = await _produtoRepository.GetProdutosAsyncById(data.ProdutoId);
+                    if (produto == null) return NotFound();
+
+                    var produtodto = _mapper.Map<ProdutoDto>(produto);
+
+                    results.Produtos.Add(produtodto);
+                }
 
                 return Ok(results);
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou" + ex.Message);
             }
         }
         [HttpGet("getByUsuario/{UsuarioId}")]
