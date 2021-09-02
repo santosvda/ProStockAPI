@@ -6,10 +6,9 @@ namespace ProStock.API.Dtos
 {
     public class UsuarioSenhaDto
     {
-        public int Id { get; set; }
         public string ConfirmarSenha { get; set; }
         public string Senha { get; set; }        
-        public int UsuarioId { get; set; }
+        public int AdminId { get; set; }
 
     }
 }

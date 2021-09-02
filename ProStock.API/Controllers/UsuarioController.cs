@@ -141,7 +141,7 @@ namespace ProStock.API.Controllers
             try
             {
 
-                if(model.UsuarioId == 0)
+                if(model.AdminId == 0)
                 {
 
                     var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
@@ -159,13 +159,15 @@ namespace ProStock.API.Controllers
 
                     if (await _usuarioRepository.SaveChangesAsync())
                     {
-                        return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(usuario));
+                        return Created($"/api/usuario/{model}", _mapper.Map<UsuarioGetDto>(usuario));
                     }
                 }
             else
             {
 
-                var admin = await _usuarioRepository.GetUsuarioAsyncById(model.UsuarioId);
+                var admin = await _usuarioRepository.GetUsuarioAsyncById(model.AdminId);
+                if (admin == null) 
+                    return NotFound();
                 if (admin.TipoUsuario != Domain.Enums.TipoUsuario.Admin)
                     return Unauthorized();
 
@@ -181,7 +183,7 @@ namespace ProStock.API.Controllers
 
                 if (await _usuarioRepository.SaveChangesAsync())
                 {
-                    return Created($"/api/usuario/{model.Id}", _mapper.Map<UsuarioGetDto>(usuario));
+                    return Created($"/api/usuario/{model}", _mapper.Map<UsuarioGetDto>(usuario));
                 }
             }
             }

@@ -21,6 +21,21 @@ namespace ProStock.API.Controllers
             _mapper = mapper;
             _estoqueRepository = EstoqueRepository;
         }
+        [HttpGet()]// api/Estoque/{id}
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var estoque = await _estoqueRepository.GetAllEstoqueAsync();
+                var results = _mapper.Map<EstoqueDto[]>(estoque);
+
+                return Ok(results);
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+            }
+        }
         [HttpGet("{EstoqueId}")]// api/Estoque/{id}
         public async Task<IActionResult> Get(int EstoqueId)
         {

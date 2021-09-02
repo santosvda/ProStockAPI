@@ -36,6 +36,16 @@ namespace ProStock.Repository.Repositorys
             return (await _context.SaveChangesAsync()) > 0;
         }
 
+        public async Task<Estoque[]> GetAllEstoqueAsync (){
+            IQueryable<Estoque> query = _context.Estoques;
+
+            query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
+            .Where(e => e.Ativo);
+
+            return await query.ToArrayAsync();
+        }
+
+
         public async Task<Estoque> GetEstoqueAsyncById (int estoqueId){
             IQueryable<Estoque> query = _context.Estoques;
 
