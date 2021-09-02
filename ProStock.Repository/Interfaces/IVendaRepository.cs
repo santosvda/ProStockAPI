@@ -7,7 +7,7 @@ namespace ProStock.Repository.Interfaces
     {
         Task<Venda[]> GetAllVendasAsyncByUserId(int VendaId);
         Task<Venda[]> GetAllVendasAsyncByClientId(int VendaId);
-         Task<Venda[]> GetAllVendasAsync();
-         Task<Venda> GetVendasAsyncById(int VendaId);
+        Task<Venda[]> GetAllVendasAsync();
+        Task<Venda> GetVendasAsyncById(int VendaId);
     }
 }

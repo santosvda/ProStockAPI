@@ -37,7 +37,12 @@ namespace ProStock.Repository.Repositorys
         }
         public async Task<Venda[]> GetAllVendasAsync(){
             IQueryable<Venda> query = _context.Vendas
-            .Include(v => v.Cliente).ThenInclude(v => v.Pessoa).Include(v => v.Usuario).ThenInclude(v => v.Pessoa);
+            .Include(v => v.Cliente)
+            .ThenInclude(v => v.Pessoa)
+            .Include(v => v.Usuario)
+            .ThenInclude(v => v.Pessoa);
+
+            query = query.Include(pv => pv.ProdutosVendas);
 
             query = query.AsNoTracking().OrderBy(p => p.Id)
             .Where(e => e.Ativo);
@@ -45,7 +50,11 @@ namespace ProStock.Repository.Repositorys
             return await query.ToArrayAsync();
         }
         public async Task<Venda[]> GetAllVendasAsyncByUserId (int userId){
-            IQueryable<Venda> query = _context.Vendas;
+            IQueryable<Venda> query = _context.Vendas
+            .Include(v => v.Cliente)
+            .ThenInclude(v => v.Pessoa)
+            .Include(v => v.Usuario)
+            .ThenInclude(v => v.Pessoa);
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataExclusao)
             .Where(p => p.UsuarioId == userId)
@@ -55,7 +64,12 @@ namespace ProStock.Repository.Repositorys
         }
 
         public async Task<Venda[]> GetAllVendasAsyncByClientId (int clientId){
-            IQueryable<Venda> query = _context.Vendas;
+            IQueryable<Venda> query = _context.Vendas
+            .Include(v => v.Cliente)
+            .ThenInclude(v => v.Pessoa)
+            .Include(v => v.Usuario)
+            .ThenInclude(v => v.Pessoa);
+
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataExclusao)
             .Where(p => p.ClienteId == clientId)
@@ -65,13 +79,32 @@ namespace ProStock.Repository.Repositorys
         }
 
         public async Task<Venda> GetVendasAsyncById (int VendaId){
-            IQueryable<Venda> query = _context.Vendas;
+            IQueryable<Venda> query = _context.Vendas
+            .Include(v => v.Cliente)
+            .ThenInclude(v => v.Pessoa)
+            .Include(v => v.Usuario)
+            .ThenInclude(v => v.Pessoa);
+
+            query = query.Include(pv => pv.ProdutosVendas).ThenInclude(p => p.Produto);
+
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
             .Where(p => p.Id == VendaId)
             .Where(e => e.Ativo);
 
             return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Produto[]> Get (int VendaId){
+            IQueryable<Produto> query = _context.Produtos;
+
+            query = query.Include(pv => pv.ProdutosVendas);
+
+            query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
+            .Where(p => p.Id == VendaId)
+            .Where(e => e.Ativo);
+
+            return await query.ToArrayAsync();
         }
 
     }

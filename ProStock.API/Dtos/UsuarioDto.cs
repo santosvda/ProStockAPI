@@ -14,6 +14,6 @@ namespace ProStock.API.Dtos
         public int? PessoaId { get; set; }
         public PessoaDto Pessoa { get; set; }
         public int? LojaId { get; set; }
-        public List<VendaDto> Vendas { get; set; }
+        //public List<VendaDto> Vendas { get; set; }
     }
 }
