@@ -18,8 +18,10 @@ namespace ProStock.API.Controllers
         private readonly IVendaRepository _vendaRepository;
         private readonly IProdutoRepository _produtoRepository;
         private readonly IMapper _mapper;
-        public VendaController(IVendaRepository vendaRepository,IProdutoRepository produtoRepository, IMapper mapper)
+        private readonly IEstoqueRepository _estoqueRepository;
+        public VendaController(IVendaRepository vendaRepository, IProdutoRepository produtoRepository, IEstoqueRepository estoqueRepository, IMapper mapper)
         {
+            _estoqueRepository = estoqueRepository;
             _mapper = mapper;
             _vendaRepository = vendaRepository;
             _produtoRepository = produtoRepository;
@@ -52,7 +54,7 @@ namespace ProStock.API.Controllers
                 var produtos = _mapper.Map<ProdutoVendaDto[]>(vendas.ProdutosVendas);
                 foreach (ProdutoVendaDto data in produtos)
                 {
-                    var produto = await _produtoRepository.GetProdutosAsyncById(data.ProdutoId);
+                    var produto = await _produtoRepository.GetProdutosAsyncById(data.ProdutoId, false);
                     if (produto == null) return NotFound();
 
                     var produtodto = _mapper.Map<ProdutoDto>(produto);
@@ -115,6 +117,12 @@ namespace ProStock.API.Controllers
                 {
                     var produto = await _produtoRepository.GetProdutosAsyncById(data.ProdutoId);
                     if (produto == null) return NotFound();
+
+                    var estoque = await _estoqueRepository.GetEstoqueAsyncByProdutoId(data.ProdutoId);
+                    if (estoque == null) return NotFound();
+
+                    if(estoque.QtdMinima > (estoque.QtdAtual - data.Quantidade))
+                        return Unauthorized();
 
                     ProdutoVenda pv = new ProdutoVenda();
                     pv.Produto = produto;

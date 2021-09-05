@@ -56,12 +56,14 @@ namespace ProStock.Repository.Repositorys
             return await query.ToArrayAsync();
         }
 
-        public async Task<Produto> GetProdutosAsyncById (int produtoId){
+        public async Task<Produto> GetProdutosAsyncById (int produtoId, bool activatedObjects = true){
             IQueryable<Produto> query = _context.Produtos;
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
-            .Where(p => p.Id == produtoId)
-            .Where(e => e.Ativo);
+            .Where(p => p.Id == produtoId);
+            
+            if(activatedObjects)
+                query = query.AsNoTracking().Where(e => e.Ativo);
 
             return await query.FirstOrDefaultAsync();
         }

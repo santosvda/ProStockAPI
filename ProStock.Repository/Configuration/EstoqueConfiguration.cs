@@ -11,9 +11,6 @@ namespace ProStock.Repository.Configuration
             builder.HasKey(p => p.Id);
             builder.Property(p => p.QtdAtual).HasDefaultValue(0);
             builder.Property(p => p.QtdMinima).HasDefaultValue(0);
-            builder.Property(p => p.QtdReservada).HasDefaultValue(0);
-
-
 
             builder.Property(p => p.Ativo).HasDefaultValue(true);
             builder.HasIndex(p => p.Ativo).IsUnique(false);
