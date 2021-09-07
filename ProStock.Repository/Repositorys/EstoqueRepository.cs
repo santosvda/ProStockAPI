@@ -60,8 +60,7 @@ namespace ProStock.Repository.Repositorys
             IQueryable<Estoque> query = _context.Estoques;
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
-            .Where(p => p.ProdutoId == produtoId)
-            .Where(e => e.Ativo);
+            .Where(p => p.ProdutoId == produtoId);
 
             return await query.FirstOrDefaultAsync();
         }

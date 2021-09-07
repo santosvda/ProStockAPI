@@ -12,6 +12,8 @@ namespace ProStock.Repository.Configuration
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Senha).HasMaxLength(100);
             builder.Property(p => p.Login).HasMaxLength(20);
+            builder.HasIndex(p => p.Login).IsUnique(true);
+
 
             builder.Property(p => p.TipoUsuario).IsRequired(true);
             builder.Property(p => p.TipoUsuario).HasDefaultValue(TipoUsuario.Operador);

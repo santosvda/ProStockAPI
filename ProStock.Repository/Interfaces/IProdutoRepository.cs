@@ -7,6 +7,6 @@ namespace ProStock.Repository.Interfaces
     {
          Task<Produto[]> GetAllProdutosAsyncByName(string nome);
          Task<Produto[]> GetAllProdutosAsync();
-         Task<Produto> GetProdutosAsyncById(int produtoId);
+         Task<Produto> GetProdutosAsyncById(int produtoId, bool activatedObjects = true);
     }
 }
