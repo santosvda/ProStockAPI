@@ -15,7 +15,7 @@ namespace ProStock.API.Dtos
         public int ClienteId { get; set; }
         public ClienteDto Cliente { get; set; }
         public int UsuarioId { get; set; }
-        public UsuarioDto Usuario { get; set; }
+        public UsuarioGetDto Usuario { get; set; }
         public List<ProdutoDto> Produtos { get;  set; }
     }
 }

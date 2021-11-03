@@ -58,6 +58,7 @@ namespace ProStock.API.Controllers
                     if (produto == null) return NotFound();
 
                     var produtodto = _mapper.Map<ProdutoDto>(produto);
+                    produtodto.Quantidade = data.Quantidade;
 
                     results.Produtos.Add(produtodto);
                 }
