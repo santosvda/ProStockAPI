@@ -37,7 +37,7 @@ namespace ProStock.Repository.Repositorys
         }
 
         public async Task<Estoque[]> GetAllEstoqueAsync (){
-            IQueryable<Estoque> query = _context.Estoques;
+            IQueryable<Estoque> query = _context.Estoques.Include(v => v.Produto);
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
             .Where(e => e.Ativo);
@@ -47,7 +47,7 @@ namespace ProStock.Repository.Repositorys
 
 
         public async Task<Estoque> GetEstoqueAsyncById (int estoqueId){
-            IQueryable<Estoque> query = _context.Estoques;
+            IQueryable<Estoque> query = _context.Estoques.Include(v => v.Produto);
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
             .Where(p => p.Id == estoqueId)
@@ -57,7 +57,7 @@ namespace ProStock.Repository.Repositorys
         }
 
         public async Task<Estoque> GetEstoqueAsyncByProdutoId (int produtoId){
-            IQueryable<Estoque> query = _context.Estoques;
+            IQueryable<Estoque> query = _context.Estoques.Include(v => v.Produto);
 
             query = query.AsNoTracking().OrderByDescending(p => p.DataInclusao)
             .Where(p => p.ProdutoId == produtoId);

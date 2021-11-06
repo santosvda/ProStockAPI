@@ -11,8 +11,8 @@ namespace ProStock.Repository.Configuration
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Email).HasMaxLength(50);
             builder.Property(p => p.Nome).HasMaxLength(70);
-            builder.Property(p => p.Telefone).HasMaxLength(14);
-            builder.Property(p => p.Cpf).HasMaxLength(11);
+            builder.Property(p => p.Telefone).HasMaxLength(17);
+            builder.Property(p => p.Cpf).HasMaxLength(14);
 
 
             builder.Property(p => p.Ativo).HasDefaultValue(true);

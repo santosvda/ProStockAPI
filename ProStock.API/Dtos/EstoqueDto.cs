@@ -9,6 +9,6 @@ namespace ProStock.API.Dtos
         public int QtdMinima { get; set; }
         public DateTime DataAlteracao { get; set; }
         public int ProdutoId { get; set; }
-        //public ProdutoDto Produto { get;}
+        public ProdutoDto Produto { get; set;}
     }
 }

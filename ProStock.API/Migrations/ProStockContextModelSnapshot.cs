@@ -167,7 +167,7 @@ namespace ProStock.API.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<string>("Cpf")
-                        .HasMaxLength(11);
+                        .HasMaxLength(14);
 
                     b.Property<DateTime?>("DataExclusao");
 
@@ -180,7 +180,7 @@ namespace ProStock.API.Migrations
                         .HasMaxLength(70);
 
                     b.Property<string>("Telefone")
-                        .HasMaxLength(14);
+                        .HasMaxLength(17);
 
                     b.HasKey("Id");
 
