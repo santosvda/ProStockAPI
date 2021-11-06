@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ProStock.Domain;
 
@@ -9,5 +10,6 @@ namespace ProStock.Repository.Interfaces
         Task<Venda[]> GetAllVendasAsyncByClientId(int VendaId);
         Task<Venda[]> GetAllVendasAsync();
         Task<Venda> GetVendasAsyncById(int VendaId);
+        Task<Venda[]> GetVendasAsyncByDate(DateTime init, DateTime end);
     }
 }

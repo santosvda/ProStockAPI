@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProStock.API.Dtos;
+using ProStock.API.Helpers;
 using ProStock.Domain;
 using ProStock.Repository;
 using ProStock.Repository.Interfaces;
@@ -42,12 +43,83 @@ namespace ProStock.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou " + ex.Message);
             }
         }
+        [HttpGet("report/general")]
+        public async Task<IActionResult> RelatorioGeral([FromQuery] string dateInit, [FromQuery] string dateEnd)
+        {
+            try
+            {
+                var vendas = await _vendaRepository.GetVendasAsyncByDate(Util.StringToDate(dateInit), Util.StringToDate(dateEnd));
+                if (vendas == null)
+                    return BadRequest();
+                var relatorio = new RelatorioBase();
+
+                foreach(Venda venda in vendas)
+                {
+                    var aux = new RelatorioVendaDto();
+                    aux.Id = venda.Id;
+                    aux.Acrescimo = venda.Acrescimo;
+                    aux.Cliente = venda.Cliente.Pessoa.Nome;
+                    aux.Data = venda.Data;
+                    aux.Desconto = venda.Desconto;
+                    aux.Frete = venda.Frete;
+                    aux.QtdProdutos = venda.ProdutosVendas.Count;
+                    aux.Status = venda.Status;
+                    aux.Usuario = venda.Usuario.Pessoa.Nome;
+                    aux.ValorTotal = venda.ValorTotal;
+
+                    relatorio.Vendas.Add(aux);
+
+                    relatorio.ValorTotalTotal += venda.ValorTotal;
+                    relatorio.AcrescimoTotal += venda.Acrescimo;
+                    relatorio.DescontoTotal += venda.Desconto;
+                    relatorio.FreteTotal += venda.Frete;
+                }
+                return Ok(relatorio);
+            }
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou " + ex.Message);
+            }
+        }
+        [HttpGet("report/{vendaId}")]
+        public async Task<IActionResult> RelatorioGeral(int vendaId)
+        {
+            try
+            {
+                var vendas = await _vendaRepository.GetVendasAsyncById(vendaId);
+                if (vendas == null)
+                    return BadRequest();
+                var results = _mapper.Map<RelatorioVendaDetalhadaDto>(vendas);
+                results.Cliente = vendas.Cliente.Pessoa.Nome;
+                results.Usuario = vendas.Usuario.Pessoa.Nome;
+
+                var produtos = _mapper.Map<ProdutoVendaDto[]>(vendas.ProdutosVendas);
+                foreach (ProdutoVendaDto data in produtos)
+                {
+                    var produto = await _produtoRepository.GetProdutosAsyncById(data.ProdutoId, false);
+                    if (produto == null) return NotFound();
+
+                    var produtodto = _mapper.Map<ProdutoDto>(produto);
+                    produtodto.Quantidade = data.Quantidade;
+
+                    results.Produtos.Add(produtodto);
+                }
+
+                return Ok(results);
+            }
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou " + ex.Message);
+            }
+        }
         [HttpGet("{vendaId}")]// api/venda/{id}
         public async Task<IActionResult> Get(int vendaId)
         {
             try
             {
                 var vendas = await _vendaRepository.GetVendasAsyncById(vendaId);
+                if (vendas == null)
+                    return BadRequest();
                 var results = _mapper.Map<VendaGetDto>(vendas);
 
                 results.Produtos = new List<ProdutoDto>();

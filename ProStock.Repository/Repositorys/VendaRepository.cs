@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -93,6 +94,23 @@ namespace ProStock.Repository.Repositorys
             .Where(e => e.Ativo);
 
             return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Venda[]> GetVendasAsyncByDate(DateTime init, DateTime end)
+        {
+            IQueryable<Venda> query = _context.Vendas
+            .Include(v => v.Cliente)
+            .ThenInclude(v => v.Pessoa)
+            .Include(v => v.Usuario)
+            .ThenInclude(v => v.Pessoa);
+
+            query = query.Include(pv => pv.ProdutosVendas);
+
+            query = query.AsNoTracking().OrderBy(p => p.Id)
+            .Where(e => e.Data >= init && e.Data <= end)
+            .Where(e => e.Ativo);
+
+            return await query.ToArrayAsync();
         }
 
         public async Task<Produto[]> Get (int VendaId){
