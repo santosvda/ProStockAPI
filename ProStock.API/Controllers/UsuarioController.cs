@@ -168,7 +168,7 @@ namespace ProStock.API.Controllers
                 var admin = await _usuarioRepository.GetUsuarioAsyncById(model.AdminId);
                 if (admin == null) 
                     return NotFound();
-                if (admin.TipoUsuario != Domain.Enums.TipoUsuario.Admin)
+                if (admin.TipoUsuario != Domain.Enums.TipoUsuario.Admin || admin.Id != UsuarioId)
                     return Unauthorized();
 
                 var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
