@@ -8,7 +8,7 @@ namespace ProStock.API.Dtos
     {
         public string ConfirmarSenha { get; set; }
         public string Senha { get; set; }        
-        public int AdminId { get; set; }
+        public int? AdminId { get; set; }
 
     }
 }

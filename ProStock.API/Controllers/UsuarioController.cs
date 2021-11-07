@@ -141,7 +141,7 @@ namespace ProStock.API.Controllers
             try
             {
 
-                if(model.AdminId == 0)
+                if(model.AdminId == 0 || model.AdminId == null)
                 {
 
                     var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
@@ -162,30 +162,30 @@ namespace ProStock.API.Controllers
                         return Created($"/api/usuario/{model}", _mapper.Map<UsuarioGetDto>(usuario));
                     }
                 }
-            else
-            {
-
-                var admin = await _usuarioRepository.GetUsuarioAsyncById(model.AdminId);
-                if (admin == null) 
-                    return NotFound();
-                if (admin.TipoUsuario != Domain.Enums.TipoUsuario.Admin)
-                    return Unauthorized();
-
-                var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
-                if (usuario == null) return NotFound();
-
-                var usuarioNew = usuario;
-                usuarioNew.Senha = model.Senha;
-                usuarioNew.Senha = Encrypt.EncodePasswordToBase64(usuarioNew.Senha);
-
-
-                _usuarioRepository.Update(usuarioNew);
-
-                if (await _usuarioRepository.SaveChangesAsync())
+                else
                 {
-                    return Created($"/api/usuario/{model}", _mapper.Map<UsuarioGetDto>(usuario));
+
+                    var admin = await _usuarioRepository.GetUsuarioAsyncById(model.AdminId ?? 0);
+                    if (admin == null) 
+                        return NotFound();
+                    if (admin.TipoUsuario != Domain.Enums.TipoUsuario.Admin)
+                        return Unauthorized();
+
+                    var usuario = await _usuarioRepository.GetUsuarioAsyncById(UsuarioId);
+                    if (usuario == null) return NotFound();
+
+                    var usuarioNew = usuario;
+                    usuarioNew.Senha = model.Senha;
+                    usuarioNew.Senha = Encrypt.EncodePasswordToBase64(usuarioNew.Senha);
+
+
+                    _usuarioRepository.Update(usuarioNew);
+
+                    if (await _usuarioRepository.SaveChangesAsync())
+                    {
+                        return Created($"/api/usuario/{model}", _mapper.Map<UsuarioGetDto>(usuario));
+                    }
                 }
-            }
             }
             catch (System.Exception ex)
             {
