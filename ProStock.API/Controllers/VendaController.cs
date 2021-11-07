@@ -50,7 +50,7 @@ namespace ProStock.API.Controllers
             {
                 var vendas = await _vendaRepository.GetVendasAsyncByDate(Util.StringToDate(dateInit), Util.StringToDate(dateEnd));
                 if (vendas == null)
-                    return BadRequest();
+                    return NotFound();
                 var relatorio = new RelatorioBase();
 
                 foreach(Venda venda in vendas)
@@ -81,6 +81,37 @@ namespace ProStock.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou " + ex.Message);
             }
         }
+        [HttpGet("report/product")]
+        public async Task<IActionResult> RelatorioProduto([FromQuery] string dateInit, [FromQuery] string dateEnd)
+        {
+            try
+            {
+                var vendas = await _vendaRepository.GetProdutosVendidos(Util.StringToDate(dateInit), Util.StringToDate(dateEnd));
+                if (vendas == null || vendas.Count == 0)
+                    return NotFound();
+                var relatorio = new List<RelatorioProdutoDto>();
+
+                foreach(var data in vendas)
+                {
+                    var aux = new RelatorioProdutoDto();
+                    var produto = await _produtoRepository.GetProdutosAsyncById(data.ProdutoId, false);
+
+                    aux.Id = data.ProdutoId;
+                    aux.Descricao = produto.Descricao;
+                    aux.Nome = produto.Nome;
+                    aux.ValorUnit = produto.ValorUnit;
+                    aux.Marca = produto.Marca;
+                    aux.Quantidade = data.Quantidade;
+                    relatorio.Add(aux);
+                }
+
+                return Ok(relatorio);
+            }
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou " + ex.Message);
+            }
+        }
         [HttpGet("report/{vendaId}")]
         public async Task<IActionResult> RelatorioGeral(int vendaId)
         {
@@ -88,7 +119,7 @@ namespace ProStock.API.Controllers
             {
                 var vendas = await _vendaRepository.GetVendasAsyncById(vendaId);
                 if (vendas == null)
-                    return BadRequest();
+                    return NotFound();
                 var results = _mapper.Map<RelatorioVendaDetalhadaDto>(vendas);
                 results.Cliente = vendas.Cliente.Pessoa.Nome;
                 results.Usuario = vendas.Usuario.Pessoa.Nome;
@@ -119,7 +150,7 @@ namespace ProStock.API.Controllers
             {
                 var vendas = await _vendaRepository.GetVendasAsyncById(vendaId);
                 if (vendas == null)
-                    return BadRequest();
+                    return NotFound();
                 var results = _mapper.Map<VendaGetDto>(vendas);
 
                 results.Produtos = new List<ProdutoDto>();

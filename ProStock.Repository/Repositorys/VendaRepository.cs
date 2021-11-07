@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -112,7 +113,19 @@ namespace ProStock.Repository.Repositorys
 
             return await query.ToArrayAsync();
         }
-
+        public async Task<dynamic> GetProdutosVendidos(DateTime init, DateTime end)
+        {
+            var result = await _context.ProdutosVendas
+                .FromSql($@"SELECT 0 as VendaId, pv.ProdutoId, SUM(pv.Quantidade) AS Quantidade, 0 as Id
+                            from produtosvendas pv 
+                            inner join produtos p on pv.ProdutoId = p.Id
+                            inner join vendas v on pv.VendaId = v.Id
+                            WHERE v.`Data` between 
+                                STR_TO_DATE({init.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)}, '%d/%m/%Y') 
+                                AND STR_TO_DATE({end.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)}, '%d/%m/%Y')
+                            group by p.Id").ToListAsync();
+            return result;
+        }
         public async Task<Produto[]> Get (int VendaId){
             IQueryable<Produto> query = _context.Produtos;
 
