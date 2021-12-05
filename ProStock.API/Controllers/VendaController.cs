@@ -226,7 +226,7 @@ namespace ProStock.API.Controllers
                     if (estoque == null) return NotFound();
 
                     if(estoque.QtdMinima > (estoque.QtdAtual - data.Quantidade))
-                        return Unauthorized();
+                        return Unauthorized("Quantidade insuficiente em estoque!");
 
                     ProdutoVenda pv = new ProdutoVenda();
                     pv.Produto = produto;
